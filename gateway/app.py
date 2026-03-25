@@ -14,20 +14,23 @@ from gateway.chat import run_chat
 from gateway.config import GATEWAY_PORT, MCP_SERVER_URL, ALLOWED_ORIGINS
 from gateway.mcp_client import MCPClient
 
+from backend.mcp_server.server import mcp as mcp_server
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Start / stop the persistent MCP client session.
 
-    Connection is deferred — the gateway starts immediately and connects
-    to the MCP backend on the first request.  This avoids crashes when
-    the backend is still waking up (Render free-tier cold start).
+    The MCP backend is mounted in-process at /mcp.  The client connects
+    to it via localhost on the first request, avoiding any cross-service
+    networking issues on Render.
     """
-    mcp_client = MCPClient(MCP_SERVER_URL)
-    app.state.mcp = mcp_client
-    app.state.mcp_connected = False
-    yield
-    await mcp_client.disconnect()
+    async with mcp_server.session_manager.run():
+        mcp_client = MCPClient(f"http://localhost:{GATEWAY_PORT}/mcp")
+        app.state.mcp = mcp_client
+        app.state.mcp_connected = False
+        yield
+        await mcp_client.disconnect()
 
 
 async def ensure_mcp_connected(request: Request):
@@ -61,6 +64,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount MCP server in-process so gateway talks to localhost
+app.mount("/mcp", mcp_server.streamable_http_app())
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 
 @app.get("/deals")
