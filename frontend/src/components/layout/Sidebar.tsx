@@ -1,5 +1,4 @@
 import { useState } from "react";
-import logo from "../../assets/logo.png";
 
 type ActivePage = "deals" | "chat" | "rag" | "graph" | "audit";
 
@@ -29,18 +28,19 @@ export function Sidebar({
         collapsed ? "w-16" : "w-56"
       }`}
     >
-      {/* Logo */}
+      {/* Branding */}
       <div className="flex items-center gap-3 px-4 h-14 border-b border-gray-800 shrink-0">
-        <img src={logo} alt="Cogniify" className="w-7 h-7 shrink-0 rounded" />
-        {!collapsed && (
+        {!collapsed ? (
           <div className="flex flex-col">
             <span className="text-sm font-bold text-white tracking-tight leading-none">
-              COGNIIFY
+              RIALTO
             </span>
             <span className="text-[9px] text-gray-500 font-semibold tracking-wider mt-0.5">
-              ENTERPRISE PLATFORM
+              AI ENTERPRISE PLATFORM
             </span>
           </div>
+        ) : (
+          <span className="text-sm font-bold text-white">R</span>
         )}
       </div>
 

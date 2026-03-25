@@ -34,14 +34,6 @@ interface GraphEdge {
 
 /* ── Theme ── */
 
-const TYPE_BG: Record<NodeType, string> = {
-  company: "bg-blue-500",
-  investor: "bg-emerald-500",
-  board_member: "bg-amber-500",
-  competitor: "bg-rose-500",
-  partner: "bg-indigo-500",
-};
-
 const TYPE_FILL: Record<NodeType, string> = {
   company: "#3b82f6",
   investor: "#10b981",
