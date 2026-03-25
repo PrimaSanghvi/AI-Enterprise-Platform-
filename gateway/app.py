@@ -17,25 +17,39 @@ from gateway.mcp_client import MCPClient
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Start / stop the persistent MCP client session."""
+    """Start / stop the persistent MCP client session.
+
+    Connection is deferred — the gateway starts immediately and connects
+    to the MCP backend on the first request.  This avoids crashes when
+    the backend is still waking up (Render free-tier cold start).
+    """
+    mcp_client = MCPClient(MCP_SERVER_URL)
+    app.state.mcp = mcp_client
+    app.state.mcp_connected = False
+    yield
+    await mcp_client.disconnect()
+
+
+async def ensure_mcp_connected(request: Request):
+    """Lazily connect to MCP backend on first request."""
     import asyncio
 
-    mcp_client = MCPClient(MCP_SERVER_URL)
-    retries = 3
+    if request.app.state.mcp_connected:
+        return
+    mcp_client: MCPClient = request.app.state.mcp
+    retries = 5
     for attempt in range(1, retries + 1):
         try:
             await mcp_client.connect()
-            break
+            request.app.state.mcp_connected = True
+            return
         except Exception as exc:
             if attempt == retries:
                 raise RuntimeError(
                     f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
                     f"Is the backend running? Error: {exc}"
                 ) from exc
-            await asyncio.sleep(2)
-    app.state.mcp = mcp_client
-    yield
-    await mcp_client.disconnect()
+            await asyncio.sleep(3 * attempt)  # progressive backoff
 
 
 app = FastAPI(title="Rialto AI Gateway", lifespan=lifespan)
@@ -52,6 +66,7 @@ app.add_middleware(
 @app.get("/deals")
 async def list_deals(request: Request):
     """Return all deals with a triage_status field."""
+    await ensure_mcp_connected(request)
     raw = await request.app.state.mcp.call_tool("backstop.list_deals", {})
     deals = json.loads(raw)
     for deal in deals:
@@ -63,6 +78,7 @@ async def list_deals(request: Request):
 @app.post("/triage/{deal_id}")
 async def triage_deal(deal_id: str, request: Request):
     """Run AI triage for a deal, streaming tool-call events via SSE."""
+    await ensure_mcp_connected(request)
     mcp_client: MCPClient = request.app.state.mcp
 
     async def event_stream():
@@ -83,6 +99,7 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 async def chat(body: ChatRequest, request: Request):
     """Chat with the AI analyst, streaming tool-call events via SSE."""
+    await ensure_mcp_connected(request)
     mcp_client: MCPClient = request.app.state.mcp
 
     async def event_stream():
