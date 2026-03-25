@@ -1,0 +1,82 @@
+[
+  {
+    "company_id": "CO-001",
+    "name": "Helix Genomics",
+    "sector": "Healthcare",
+    "stage": "Series B",
+    "description": "Precision oncology platform using whole-genome sequencing to match patients with targeted therapies. 14 active pharma partnerships and presence in 42 oncology centers across 12 states.",
+    "hq": "Cambridge, MA",
+    "founded": 2021,
+    "website": "https://helixgenomics.example.com"
+  },
+  {
+    "company_id": "CO-002",
+    "name": "CarbonPath",
+    "sector": "Climate",
+    "stage": "Series A",
+    "description": "Soil carbon measurement and verification platform for agricultural carbon credits. Uses hyperspectral imaging and ML models to provide MRV (measurement, reporting, verification) at 10x lower cost than manual sampling.",
+    "hq": "Des Moines, IA",
+    "founded": 2023,
+    "website": "https://carbonpath.example.com"
+  },
+  {
+    "company_id": "CO-003",
+    "name": "NovaPay",
+    "sector": "FinTech",
+    "stage": "Series B",
+    "description": "Real-time B2B payments infrastructure for mid-market companies. Proprietary fraud detection ML reduces chargebacks by 85%. Processing $2.1B annualized TPV with 72% gross margins.",
+    "hq": "New York, NY",
+    "founded": 2022,
+    "website": "https://novapay.example.com"
+  },
+  {
+    "company_id": "CO-004",
+    "name": "MedLens AI",
+    "sector": "Healthcare",
+    "stage": "Series A",
+    "description": "AI-powered diagnostic imaging platform for radiology. Foundation model trained on 12M anonymized scans detects 47 conditions with radiologist-level accuracy. Deployed at 8 health systems.",
+    "hq": "Palo Alto, CA",
+    "founded": 2023,
+    "website": "https://medlensai.example.com"
+  },
+  {
+    "company_id": "CO-005",
+    "name": "GridShift Energy",
+    "sector": "Climate",
+    "stage": "Growth",
+    "description": "Virtual power plant platform aggregating distributed energy resources (solar, storage, EVs) for grid services. 340 MW under management across 12 utility partners. Revenue run rate $45M.",
+    "hq": "Austin, TX",
+    "founded": 2020,
+    "website": "https://gridshift.example.com"
+  },
+  {
+    "company_id": "CO-006",
+    "name": "LedgerBase",
+    "sector": "FinTech",
+    "stage": "Seed",
+    "description": "Embedded accounting API for vertical SaaS platforms. Automates GL entries, reconciliation, and financial reporting. 22 platform partners in beta with $180K MRR.",
+    "hq": "San Francisco, CA",
+    "founded": 2024,
+    "website": "https://ledgerbase.example.com"
+  },
+  {
+    "company_id": "CO-007",
+    "name": "VitalSign Dx",
+    "sector": "Healthcare",
+    "stage": "Series C",
+    "description": "FDA-cleared continuous biosensor wearable platform for remote patient monitoring. 3 cleared indications (cardiac arrhythmia, sleep apnea, glucose trending). 18 granted patents. $28M ARR.",
+    "hq": "San Diego, CA",
+    "founded": 2019,
+    "website": "https://vitalsigndx.example.com"
+  },
+  {
+    "company_id": "CO-008",
+    "name": "AeroCarbon",
+    "sector": "Climate",
+    "stage": "Series B",
+    "description": "Next-generation direct air capture (DAC) using novel electrochemical sorbents. Lab results show 65% energy reduction vs. incumbent approaches. Pilot plant under construction in Iceland.",
+    "hq": "Boston, MA",
+    "founded": 2022,
+    "website": "https://aerocarbon.example.com"
+  }
+]

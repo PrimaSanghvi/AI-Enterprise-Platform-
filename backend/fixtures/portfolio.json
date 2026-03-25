@@ -1,0 +1,121 @@
+[
+  {
+    "company_name": "Helix Genomics",
+    "sector": "Healthcare",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.72,
+    "details": "Shares 4 of top 10 pharma customers with Rialto portfolio company BioReach Therapeutics. Both sell into oncology clinical operations."
+  },
+  {
+    "company_name": "Helix Genomics",
+    "sector": "Healthcare",
+    "overlap_type": "talent_overlap",
+    "overlap_score": 0.35,
+    "details": "3 Helix engineers previously at Rialto portfolio company GenomeBridge. No non-compete concerns but signals talent pool overlap."
+  },
+  {
+    "company_name": "MedLens AI",
+    "sector": "Healthcare",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.28,
+    "details": "Minimal overlap with existing portfolio. Diagnostic imaging is a new vertical for Rialto. Complementary to VitalSign Dx remote monitoring."
+  },
+  {
+    "company_name": "MedLens AI",
+    "sector": "Healthcare",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.41,
+    "details": "3 of 8 deployed health systems are also customers of Rialto portfolio company CareStack. Potential cross-sell opportunity."
+  },
+  {
+    "company_name": "VitalSign Dx",
+    "sector": "Healthcare",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.55,
+    "details": "Remote patient monitoring market overlaps with Rialto portfolio company TeleCare Health. Different modality (wearable vs. app-based) limits direct competition."
+  },
+  {
+    "company_name": "VitalSign Dx",
+    "sector": "Healthcare",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.62,
+    "details": "UnitedHealth Group RPM pilot overlaps with TeleCare Health's existing UHG contract. Need to assess channel conflict risk."
+  },
+  {
+    "company_name": "CarbonPath",
+    "sector": "Climate",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.18,
+    "details": "Agricultural carbon credits is a new vertical for Rialto. No existing portfolio overlap. Clean entry point."
+  },
+  {
+    "company_name": "CarbonPath",
+    "sector": "Climate",
+    "overlap_type": "talent_overlap",
+    "overlap_score": 0.12,
+    "details": "Team is agriculture-native. No overlap with existing Rialto climate portfolio which is energy-focused."
+  },
+  {
+    "company_name": "GridShift Energy",
+    "sector": "Climate",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.68,
+    "details": "Significant overlap with Rialto portfolio company SolarFlow in distributed energy. GridShift is downstream (aggregation) while SolarFlow is upstream (installation)."
+  },
+  {
+    "company_name": "GridShift Energy",
+    "sector": "Climate",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.45,
+    "details": "4 of 12 utility partners also contract with SolarFlow. Potential synergy rather than conflict — complementary offerings."
+  },
+  {
+    "company_name": "AeroCarbon",
+    "sector": "Climate",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.22,
+    "details": "DAC is a new category for Rialto. No existing carbon removal investments. Would be first pure-play CDR bet."
+  },
+  {
+    "company_name": "AeroCarbon",
+    "sector": "Climate",
+    "overlap_type": "talent_overlap",
+    "overlap_score": 0.08,
+    "details": "Highly specialized electrochemistry team. No talent overlap with existing portfolio."
+  },
+  {
+    "company_name": "NovaPay",
+    "sector": "FinTech",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.45,
+    "details": "B2B payments competes in adjacent segment to Rialto portfolio company PayStream (SMB payments). NovaPay targets mid-market, PayStream targets micro-merchants."
+  },
+  {
+    "company_name": "NovaPay",
+    "sector": "FinTech",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.31,
+    "details": "Limited customer overlap due to different segments. 2 shared enterprise customers identified in manufacturing vertical."
+  },
+  {
+    "company_name": "NovaPay",
+    "sector": "FinTech",
+    "overlap_type": "talent_overlap",
+    "overlap_score": 0.52,
+    "details": "NovaPay CTO previously VP Eng at PayStream (2020-2022). Several engineers also ex-PayStream. Cultural familiarity could ease co-investment dynamics."
+  },
+  {
+    "company_name": "LedgerBase",
+    "sector": "FinTech",
+    "overlap_type": "market_overlap",
+    "overlap_score": 0.15,
+    "details": "Embedded accounting is greenfield for Rialto. No existing fintech infrastructure plays in accounting. Good portfolio diversification."
+  },
+  {
+    "company_name": "LedgerBase",
+    "sector": "FinTech",
+    "overlap_type": "customer_overlap",
+    "overlap_score": 0.38,
+    "details": "3 of 22 beta platform partners are also customers of Rialto portfolio companies. Potential warm intros for expansion."
+  }
+]

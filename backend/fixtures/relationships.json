@@ -1,0 +1,99 @@
+{
+  "CO-001": {
+    "company_id": "CO-001",
+    "company_name": "Helix Genomics",
+    "relationships": [
+      {"entity_id": "INV-001", "name": "a16z Bio Fund III", "type": "investor", "details": "Led Series A, $8M. Board seat held by GP Jorge Conde."},
+      {"entity_id": "INV-002", "name": "Flagship Pioneering", "type": "investor", "details": "Series A participant, $3M."},
+      {"entity_id": "BRD-001", "name": "Dr. Elena Vasquez", "type": "board_member", "details": "Former CSO at Illumina. Deep sequencing expertise."},
+      {"entity_id": "BRD-002", "name": "Jorge Conde", "type": "board_member", "details": "General Partner at a16z Bio."},
+      {"entity_id": "CMP-001", "name": "Tempus AI", "type": "competitor", "details": "Precision medicine platform, $10B+ valuation. Broader scope but less focused on WGS."},
+      {"entity_id": "CMP-002", "name": "Foundation Medicine", "type": "competitor", "details": "Acquired by Roche. Genomic profiling for oncology. Panel-based vs. Helix's WGS approach."},
+      {"entity_id": "PTR-001", "name": "Mayo Clinic", "type": "partner", "details": "Clinical validation partner for oncology sequencing pipeline."}
+    ]
+  },
+  "CO-002": {
+    "company_id": "CO-002",
+    "company_name": "CarbonPath",
+    "relationships": [
+      {"entity_id": "INV-003", "name": "Lowercarbon Capital", "type": "investor", "details": "Led Seed round, $2.5M."},
+      {"entity_id": "INV-004", "name": "Congruent Ventures", "type": "investor", "details": "Seed participant, $1M."},
+      {"entity_id": "BRD-003", "name": "Clay Mitchell", "type": "board_member", "details": "Pioneer in precision agriculture. Iowa farmer and tech advocate."},
+      {"entity_id": "CMP-003", "name": "Indigo Agriculture", "type": "competitor", "details": "Carbon credit marketplace with biological approach. Larger but different methodology."},
+      {"entity_id": "CMP-004", "name": "Yard Stick PBC", "type": "competitor", "details": "Soil carbon measurement using probe-based sensing. Similar MRV focus."},
+      {"entity_id": "PTR-002", "name": "Corteva Agriscience", "type": "partner", "details": "Pilot program for integrating CarbonPath MRV into Corteva's sustainability platform."}
+    ]
+  },
+  "CO-003": {
+    "company_id": "CO-003",
+    "company_name": "NovaPay",
+    "relationships": [
+      {"entity_id": "INV-005", "name": "Sequoia Capital", "type": "investor", "details": "Led Series A, $12M."},
+      {"entity_id": "INV-006", "name": "Ribbit Capital", "type": "investor", "details": "Series A participant, $5M. Payments thesis alignment."},
+      {"entity_id": "BRD-004", "name": "Amira Khalil", "type": "board_member", "details": "Former CTO at Stripe. Deep payments infrastructure experience."},
+      {"entity_id": "BRD-005", "name": "David Liu", "type": "board_member", "details": "Partner at Sequoia. Led investment."},
+      {"entity_id": "CMP-005", "name": "Melio", "type": "competitor", "details": "B2B payments for SMBs. Different segment but overlapping in mid-market."},
+      {"entity_id": "CMP-006", "name": "Routable", "type": "competitor", "details": "B2B payment orchestration. API-first approach similar to NovaPay."},
+      {"entity_id": "PTR-003", "name": "Cross River Bank", "type": "partner", "details": "Banking-as-a-service partner providing settlement and compliance infrastructure."}
+    ]
+  },
+  "CO-004": {
+    "company_id": "CO-004",
+    "company_name": "MedLens AI",
+    "relationships": [
+      {"entity_id": "INV-007", "name": "Google Ventures", "type": "investor", "details": "Led Seed round, $4M. Strategic value in cloud/TPU access."},
+      {"entity_id": "BRD-006", "name": "Prof. Fei-Fei Li", "type": "board_member", "details": "Stanford HAI co-director. Advisor on foundation model architecture."},
+      {"entity_id": "CMP-007", "name": "Aidoc", "type": "competitor", "details": "AI radiology triage. FDA-cleared for multiple indications."},
+      {"entity_id": "CMP-008", "name": "Viz.ai", "type": "competitor", "details": "AI-powered stroke detection and care coordination. Narrower focus."},
+      {"entity_id": "PTR-004", "name": "Stanford Health Care", "type": "partner", "details": "Clinical deployment site and research collaboration on foundation model validation."}
+    ]
+  },
+  "CO-005": {
+    "company_id": "CO-005",
+    "company_name": "GridShift Energy",
+    "relationships": [
+      {"entity_id": "INV-008", "name": "Breakthrough Energy Ventures", "type": "investor", "details": "Led Series A, $15M. Strong conviction in VPP thesis."},
+      {"entity_id": "INV-009", "name": "Energy Impact Partners", "type": "investor", "details": "Series B lead, $25M. Strategic LP base of utilities."},
+      {"entity_id": "BRD-007", "name": "Jigar Shah", "type": "board_member", "details": "Former DOE Loan Programs Office director. Grid modernization expertise."},
+      {"entity_id": "CMP-009", "name": "Sunnova Energy", "type": "competitor", "details": "Residential solar + storage with VPP capabilities. More consumer-focused."},
+      {"entity_id": "CMP-010", "name": "Stem Inc.", "type": "competitor", "details": "AI-driven energy storage optimization. Public company, broader but less nimble."},
+      {"entity_id": "PTR-005", "name": "Austin Energy", "type": "partner", "details": "Anchor utility partner. 120 MW of DERs under GridShift management."}
+    ]
+  },
+  "CO-006": {
+    "company_id": "CO-006",
+    "company_name": "LedgerBase",
+    "relationships": [
+      {"entity_id": "INV-010", "name": "Y Combinator", "type": "investor", "details": "W25 batch. $500K standard deal."},
+      {"entity_id": "INV-011", "name": "Cota Capital", "type": "investor", "details": "Pre-seed, $1.2M. Fintech infrastructure thesis."},
+      {"entity_id": "BRD-008", "name": "Rachel Carlson", "type": "board_member", "details": "CEO at Guild Education. Experience scaling B2B SaaS."},
+      {"entity_id": "CMP-011", "name": "Rutter", "type": "competitor", "details": "Unified API for accounting platforms. Different angle but adjacent."},
+      {"entity_id": "CMP-012", "name": "Layer", "type": "competitor", "details": "Embedded accounting for vertical SaaS. Direct competitor, slightly ahead on integrations."}
+    ]
+  },
+  "CO-007": {
+    "company_id": "CO-007",
+    "company_name": "VitalSign Dx",
+    "relationships": [
+      {"entity_id": "INV-012", "name": "Arch Venture Partners", "type": "investor", "details": "Series B lead, $20M. Deep biotech/medtech portfolio."},
+      {"entity_id": "INV-013", "name": "Johnson & Johnson Innovation", "type": "investor", "details": "Strategic Series B participant, $8M. Potential acquirer."},
+      {"entity_id": "BRD-009", "name": "Dr. Robert Califf", "type": "board_member", "details": "Former FDA Commissioner. Regulatory strategy advisor."},
+      {"entity_id": "BRD-010", "name": "Kristina Burow", "type": "board_member", "details": "Managing Director at Arch Venture Partners."},
+      {"entity_id": "CMP-013", "name": "Biobeat", "type": "competitor", "details": "FDA-cleared wearable patient monitor. Narrower indication set."},
+      {"entity_id": "CMP-014", "name": "Current Health (Best Buy)", "type": "competitor", "details": "Remote patient monitoring acquired by Best Buy Health. Enterprise distribution advantage."},
+      {"entity_id": "PTR-006", "name": "UnitedHealth Group", "type": "partner", "details": "Payer partnership for RPM reimbursement pilot covering 15,000 patients."}
+    ]
+  },
+  "CO-008": {
+    "company_id": "CO-008",
+    "company_name": "AeroCarbon",
+    "relationships": [
+      {"entity_id": "INV-014", "name": "Lowercarbon Capital", "type": "investor", "details": "Led Series A, $10M. Chris Sacca personally involved."},
+      {"entity_id": "INV-015", "name": "MIT The Engine", "type": "investor", "details": "Seed investor, $2M. Spun out of MIT chemical engineering."},
+      {"entity_id": "BRD-011", "name": "Prof. Yet-Ming Chiang", "type": "board_member", "details": "MIT professor. Co-inventor of core electrochemical sorbent technology."},
+      {"entity_id": "CMP-015", "name": "Climeworks", "type": "competitor", "details": "Leading DAC company. Thermal approach, operational in Iceland. Higher energy cost."},
+      {"entity_id": "CMP-016", "name": "Carbon Engineering (Oxy)", "type": "competitor", "details": "Acquired by Occidental Petroleum. Liquid solvent DAC approach."},
+      {"entity_id": "PTR-007", "name": "Carbfix", "type": "partner", "details": "Icelandic CO2 mineralization partner for permanent storage at pilot plant site."}
+    ]
+  }
+}

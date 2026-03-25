@@ -1,0 +1,167 @@
+[
+  {
+    "deal_id": "DEAL-001",
+    "company_id": "CO-001",
+    "company_name": "Helix Genomics",
+    "sector": "Healthcare",
+    "stage": "Series B",
+    "status": "due_diligence",
+    "source": "Inbound — founder referral via Dr. Elena Vasquez",
+    "date_received": "2025-11-03",
+    "ask_amount": 25000000,
+    "valuation": 180000000,
+    "lead_partner": "Sarah Chen",
+    "triage_results": [
+      {
+        "timestamp": "2025-11-10T14:30:00Z",
+        "analyst": "James Park",
+        "decision": "advance",
+        "rationale": "Strong clinical traction with 14 pharma partnerships. TAM is large and growing. Sequencing cost tailwinds favor this model. Recommend full DD."
+      }
+    ]
+  },
+  {
+    "deal_id": "DEAL-002",
+    "company_id": "CO-002",
+    "company_name": "CarbonPath",
+    "sector": "Climate",
+    "stage": "Series A",
+    "status": "screening",
+    "source": "Outbound — Climate Week NYC conference",
+    "date_received": "2025-12-15",
+    "ask_amount": 12000000,
+    "valuation": 60000000,
+    "lead_partner": "Marcus Rivera",
+    "triage_results": []
+  },
+  {
+    "deal_id": "DEAL-003",
+    "company_id": "CO-003",
+    "company_name": "NovaPay",
+    "sector": "FinTech",
+    "stage": "Series B",
+    "status": "ic_review",
+    "source": "Inbound — co-investor intro from Sequoia",
+    "date_received": "2025-09-22",
+    "ask_amount": 40000000,
+    "valuation": 320000000,
+    "lead_partner": "Sarah Chen",
+    "triage_results": [
+      {
+        "timestamp": "2025-09-28T10:00:00Z",
+        "analyst": "Priya Sharma",
+        "decision": "advance",
+        "rationale": "Exceptional growth metrics — 4x YoY TPV growth. Strong unit economics with 72% gross margin. Market timing is right with real-time payments adoption accelerating."
+      },
+      {
+        "timestamp": "2025-10-15T16:45:00Z",
+        "analyst": "James Park",
+        "decision": "advance",
+        "rationale": "DD confirms strong technical moat in fraud detection ML. Customer retention at 97%. Recommend IC review."
+      }
+    ]
+  },
+  {
+    "deal_id": "DEAL-004",
+    "company_id": "CO-004",
+    "company_name": "MedLens AI",
+    "sector": "Healthcare",
+    "stage": "Series A",
+    "status": "screening",
+    "source": "Inbound — Stanford AI Lab spinout, warm intro via LP network",
+    "date_received": "2026-01-08",
+    "ask_amount": 15000000,
+    "valuation": 75000000,
+    "lead_partner": "Marcus Rivera",
+    "triage_results": []
+  },
+  {
+    "deal_id": "DEAL-005",
+    "company_id": "CO-005",
+    "company_name": "GridShift Energy",
+    "sector": "Climate",
+    "stage": "Growth",
+    "status": "due_diligence",
+    "source": "Outbound — identified via Rialto energy thesis mapping",
+    "date_received": "2025-10-01",
+    "ask_amount": 60000000,
+    "valuation": 520000000,
+    "lead_partner": "Sarah Chen",
+    "triage_results": [
+      {
+        "timestamp": "2025-10-12T09:15:00Z",
+        "analyst": "Priya Sharma",
+        "decision": "advance",
+        "rationale": "Category leader in virtual power plants. 340 MW under management across 12 utilities. Revenue run rate $45M. Fits our energy transition thesis perfectly."
+      }
+    ]
+  },
+  {
+    "deal_id": "DEAL-006",
+    "company_id": "CO-006",
+    "company_name": "LedgerBase",
+    "sector": "FinTech",
+    "stage": "Seed",
+    "status": "screening",
+    "source": "Inbound — YC W25 demo day",
+    "date_received": "2026-02-20",
+    "ask_amount": 4000000,
+    "valuation": 20000000,
+    "lead_partner": "Marcus Rivera",
+    "triage_results": []
+  },
+  {
+    "deal_id": "DEAL-007",
+    "company_id": "CO-007",
+    "company_name": "VitalSign Dx",
+    "sector": "Healthcare",
+    "stage": "Series C",
+    "status": "closed",
+    "source": "Inbound — board member referral",
+    "date_received": "2025-06-15",
+    "ask_amount": 50000000,
+    "valuation": 410000000,
+    "lead_partner": "Sarah Chen",
+    "triage_results": [
+      {
+        "timestamp": "2025-06-22T11:00:00Z",
+        "analyst": "James Park",
+        "decision": "advance",
+        "rationale": "FDA-cleared wearable biosensor platform with 3 approved indications. Strong reimbursement trajectory. $28M ARR growing 120% YoY."
+      },
+      {
+        "timestamp": "2025-07-10T14:30:00Z",
+        "analyst": "Priya Sharma",
+        "decision": "advance",
+        "rationale": "Clinical data compelling — 94% sensitivity, 91% specificity across all indications. IP portfolio is defensible with 18 granted patents. Recommend IC."
+      },
+      {
+        "timestamp": "2025-08-01T09:00:00Z",
+        "analyst": "Sarah Chen",
+        "decision": "advance",
+        "rationale": "IC approved. Rialto to co-lead with Arch Venture Partners at $410M pre. Closing Q3 2025."
+      }
+    ]
+  },
+  {
+    "deal_id": "DEAL-008",
+    "company_id": "CO-008",
+    "company_name": "AeroCarbon",
+    "sector": "Climate",
+    "stage": "Series B",
+    "status": "due_diligence",
+    "source": "Outbound — direct outreach after Nature paper on DAC efficiency",
+    "date_received": "2025-12-01",
+    "ask_amount": 30000000,
+    "valuation": 200000000,
+    "lead_partner": "Marcus Rivera",
+    "triage_results": [
+      {
+        "timestamp": "2025-12-08T13:00:00Z",
+        "analyst": "James Park",
+        "decision": "hold",
+        "rationale": "Breakthrough DAC technology but unit economics still unproven at scale. Need to see pilot plant data from Q1 2026 before advancing. Revisit in 60 days."
+      }
+    ]
+  }
+]

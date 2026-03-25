@@ -1,0 +1,209 @@
+[
+  {
+    "file_id": "FILE-001",
+    "deal_id": "DEAL-001",
+    "filename": "helix_genomics_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 4200,
+    "uploaded_at": "2025-11-04T09:30:00Z",
+    "url": "/files/DEAL-001/helix_genomics_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-002",
+    "deal_id": "DEAL-001",
+    "filename": "helix_q3_financials.xlsx",
+    "file_type": "financials",
+    "size_kb": 890,
+    "uploaded_at": "2025-11-05T14:15:00Z",
+    "url": "/files/DEAL-001/helix_q3_financials.xlsx"
+  },
+  {
+    "file_id": "FILE-003",
+    "deal_id": "DEAL-001",
+    "filename": "helix_dd_memo.pdf",
+    "file_type": "memo",
+    "size_kb": 1560,
+    "uploaded_at": "2025-11-20T11:00:00Z",
+    "url": "/files/DEAL-001/helix_dd_memo.pdf"
+  },
+  {
+    "file_id": "FILE-004",
+    "deal_id": "DEAL-002",
+    "filename": "carbonpath_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 3800,
+    "uploaded_at": "2025-12-16T10:00:00Z",
+    "url": "/files/DEAL-002/carbonpath_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-005",
+    "deal_id": "DEAL-002",
+    "filename": "carbonpath_technical_report.pdf",
+    "file_type": "memo",
+    "size_kb": 2400,
+    "uploaded_at": "2025-12-18T16:30:00Z",
+    "url": "/files/DEAL-002/carbonpath_technical_report.pdf"
+  },
+  {
+    "file_id": "FILE-006",
+    "deal_id": "DEAL-003",
+    "filename": "novapay_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 5100,
+    "uploaded_at": "2025-09-23T08:45:00Z",
+    "url": "/files/DEAL-003/novapay_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-007",
+    "deal_id": "DEAL-003",
+    "filename": "novapay_financials.xlsx",
+    "file_type": "financials",
+    "size_kb": 1200,
+    "uploaded_at": "2025-09-25T13:20:00Z",
+    "url": "/files/DEAL-003/novapay_financials.xlsx"
+  },
+  {
+    "file_id": "FILE-008",
+    "deal_id": "DEAL-003",
+    "filename": "novapay_dd_memo.pdf",
+    "file_type": "memo",
+    "size_kb": 2100,
+    "uploaded_at": "2025-10-20T09:00:00Z",
+    "url": "/files/DEAL-003/novapay_dd_memo.pdf"
+  },
+  {
+    "file_id": "FILE-009",
+    "deal_id": "DEAL-003",
+    "filename": "novapay_security_audit.pdf",
+    "file_type": "legal",
+    "size_kb": 980,
+    "uploaded_at": "2025-10-22T15:00:00Z",
+    "url": "/files/DEAL-003/novapay_security_audit.pdf"
+  },
+  {
+    "file_id": "FILE-010",
+    "deal_id": "DEAL-004",
+    "filename": "medlens_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 6200,
+    "uploaded_at": "2026-01-09T10:30:00Z",
+    "url": "/files/DEAL-004/medlens_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-011",
+    "deal_id": "DEAL-004",
+    "filename": "medlens_technical_whitepaper.pdf",
+    "file_type": "memo",
+    "size_kb": 1800,
+    "uploaded_at": "2026-01-10T14:00:00Z",
+    "url": "/files/DEAL-004/medlens_technical_whitepaper.pdf"
+  },
+  {
+    "file_id": "FILE-012",
+    "deal_id": "DEAL-005",
+    "filename": "gridshift_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 4500,
+    "uploaded_at": "2025-10-02T11:15:00Z",
+    "url": "/files/DEAL-005/gridshift_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-013",
+    "deal_id": "DEAL-005",
+    "filename": "gridshift_financials.xlsx",
+    "file_type": "financials",
+    "size_kb": 1400,
+    "uploaded_at": "2025-10-04T09:00:00Z",
+    "url": "/files/DEAL-005/gridshift_financials.xlsx"
+  },
+  {
+    "file_id": "FILE-014",
+    "deal_id": "DEAL-005",
+    "filename": "gridshift_dd_memo.pdf",
+    "file_type": "memo",
+    "size_kb": 1900,
+    "uploaded_at": "2025-10-25T16:45:00Z",
+    "url": "/files/DEAL-005/gridshift_dd_memo.pdf"
+  },
+  {
+    "file_id": "FILE-015",
+    "deal_id": "DEAL-005",
+    "filename": "gridshift_utility_contracts.pdf",
+    "file_type": "legal",
+    "size_kb": 3200,
+    "uploaded_at": "2025-10-28T10:00:00Z",
+    "url": "/files/DEAL-005/gridshift_utility_contracts.pdf"
+  },
+  {
+    "file_id": "FILE-016",
+    "deal_id": "DEAL-006",
+    "filename": "ledgerbase_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 3100,
+    "uploaded_at": "2026-02-21T09:00:00Z",
+    "url": "/files/DEAL-006/ledgerbase_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-017",
+    "deal_id": "DEAL-006",
+    "filename": "ledgerbase_api_docs.pdf",
+    "file_type": "memo",
+    "size_kb": 750,
+    "uploaded_at": "2026-02-22T11:30:00Z",
+    "url": "/files/DEAL-006/ledgerbase_api_docs.pdf"
+  },
+  {
+    "file_id": "FILE-018",
+    "deal_id": "DEAL-007",
+    "filename": "vitalsign_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 5800,
+    "uploaded_at": "2025-06-16T08:00:00Z",
+    "url": "/files/DEAL-007/vitalsign_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-019",
+    "deal_id": "DEAL-007",
+    "filename": "vitalsign_dd_memo.pdf",
+    "file_type": "memo",
+    "size_kb": 2800,
+    "uploaded_at": "2025-07-15T14:30:00Z",
+    "url": "/files/DEAL-007/vitalsign_dd_memo.pdf"
+  },
+  {
+    "file_id": "FILE-020",
+    "deal_id": "DEAL-007",
+    "filename": "vitalsign_regulatory_summary.pdf",
+    "file_type": "legal",
+    "size_kb": 1100,
+    "uploaded_at": "2025-07-18T10:00:00Z",
+    "url": "/files/DEAL-007/vitalsign_regulatory_summary.pdf"
+  },
+  {
+    "file_id": "FILE-021",
+    "deal_id": "DEAL-008",
+    "filename": "aerocarbon_pitch_deck.pdf",
+    "file_type": "pitch_deck",
+    "size_kb": 4800,
+    "uploaded_at": "2025-12-02T09:30:00Z",
+    "url": "/files/DEAL-008/aerocarbon_pitch_deck.pdf"
+  },
+  {
+    "file_id": "FILE-022",
+    "deal_id": "DEAL-008",
+    "filename": "aerocarbon_nature_paper.pdf",
+    "file_type": "memo",
+    "size_kb": 920,
+    "uploaded_at": "2025-12-02T09:30:00Z",
+    "url": "/files/DEAL-008/aerocarbon_nature_paper.pdf"
+  },
+  {
+    "file_id": "FILE-023",
+    "deal_id": "DEAL-008",
+    "filename": "aerocarbon_dd_memo.pdf",
+    "file_type": "memo",
+    "size_kb": 1700,
+    "uploaded_at": "2025-12-15T16:00:00Z",
+    "url": "/files/DEAL-008/aerocarbon_dd_memo.pdf"
+  }
+]

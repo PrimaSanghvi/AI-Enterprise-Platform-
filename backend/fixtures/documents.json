@@ -1,0 +1,322 @@
+[
+  {
+    "chunk_id": "CHK-001",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_genomics_pitch_deck.pdf",
+    "text": "Helix Genomics has demonstrated 340% year-over-year revenue growth, reaching $18M ARR as of Q3 2025. The company serves 42 oncology centers across 12 states with its whole-genome sequencing platform.",
+    "metadata": {"page": 4, "section": "financials"}
+  },
+  {
+    "chunk_id": "CHK-002",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_genomics_pitch_deck.pdf",
+    "text": "The precision oncology market is projected to reach $120B by 2030 (CAGR 11.2%). Key tailwinds include declining sequencing costs, expanding biomarker-driven FDA approvals, and growing payer acceptance of genomic testing.",
+    "metadata": {"page": 7, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-003",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_genomics_pitch_deck.pdf",
+    "text": "Helix's competitive advantage lies in its proprietary bioinformatics pipeline that delivers actionable results in 7 days vs. industry standard of 21 days. This speed advantage drives a 92% physician reorder rate.",
+    "metadata": {"page": 9, "section": "competitive_advantage"}
+  },
+  {
+    "chunk_id": "CHK-004",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_dd_memo.pdf",
+    "text": "Key risk: Reimbursement uncertainty. While Medicare covers WGS for certain cancer types, commercial payer adoption remains inconsistent. Helix reports 68% collection rate on commercial claims, up from 45% in 2024.",
+    "metadata": {"page": 3, "section": "risks"}
+  },
+  {
+    "chunk_id": "CHK-005",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_dd_memo.pdf",
+    "text": "Management team is exceptionally strong. CEO Dr. Sarah Liu (ex-Illumina VP) has deep industry relationships. CTO Dr. Raj Patel built the bioinformatics platform from scratch and holds 6 patents in the space.",
+    "metadata": {"page": 5, "section": "team"}
+  },
+  {
+    "chunk_id": "CHK-006",
+    "deal_id": "DEAL-002",
+    "sector": "Climate",
+    "source_file": "carbonpath_pitch_deck.pdf",
+    "text": "CarbonPath's hyperspectral imaging system can measure soil organic carbon to ±0.3% accuracy at 1/10th the cost of traditional core sampling. Each drone survey covers 500 acres per day.",
+    "metadata": {"page": 3, "section": "technology"}
+  },
+  {
+    "chunk_id": "CHK-007",
+    "deal_id": "DEAL-002",
+    "sector": "Climate",
+    "source_file": "carbonpath_pitch_deck.pdf",
+    "text": "The voluntary carbon credit market reached $2B in 2025 and is projected to hit $50B by 2030. Agricultural soil carbon represents the largest untapped pool, estimated at 8 GtCO2e of annual sequestration potential.",
+    "metadata": {"page": 6, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-008",
+    "deal_id": "DEAL-002",
+    "sector": "Climate",
+    "source_file": "carbonpath_pitch_deck.pdf",
+    "text": "CarbonPath has signed LOIs with 3 major agricultural cooperatives covering 2.1 million acres. Pilot deployments with Corteva Agriscience validate the measurement accuracy against gold-standard lab analysis.",
+    "metadata": {"page": 8, "section": "traction"}
+  },
+  {
+    "chunk_id": "CHK-009",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_pitch_deck.pdf",
+    "text": "NovaPay processed $2.1B in total payment volume in the trailing twelve months, representing 4x year-over-year growth. The platform serves 1,200 mid-market businesses with an average contract value of $48K.",
+    "metadata": {"page": 5, "section": "traction"}
+  },
+  {
+    "chunk_id": "CHK-010",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_pitch_deck.pdf",
+    "text": "NovaPay's ML-based fraud detection engine analyzes 200+ signals per transaction in real-time, reducing false positive rates by 73% compared to rule-based systems. This saves customers an average of $340K annually in fraud losses.",
+    "metadata": {"page": 8, "section": "technology"}
+  },
+  {
+    "chunk_id": "CHK-011",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_dd_memo.pdf",
+    "text": "Customer retention is exceptional at 97% net revenue retention. Expansion revenue driven by cross-selling treasury management and FX hedging modules. CAC payback period is 11 months.",
+    "metadata": {"page": 2, "section": "unit_economics"}
+  },
+  {
+    "chunk_id": "CHK-012",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_dd_memo.pdf",
+    "text": "Key concern: NovaPay CTO (ex-PayStream) may create perception issues with Rialto's existing PayStream investment. Legal review confirms no IP contamination risk, but optics should be managed proactively.",
+    "metadata": {"page": 6, "section": "risks"}
+  },
+  {
+    "chunk_id": "CHK-013",
+    "deal_id": "DEAL-004",
+    "sector": "Healthcare",
+    "source_file": "medlens_pitch_deck.pdf",
+    "text": "MedLens AI's foundation model was trained on 12 million anonymized radiology scans across 47 conditions. In peer-reviewed validation studies, the model matches or exceeds board-certified radiologist accuracy on 43 of 47 conditions.",
+    "metadata": {"page": 4, "section": "technology"}
+  },
+  {
+    "chunk_id": "CHK-014",
+    "deal_id": "DEAL-004",
+    "sector": "Healthcare",
+    "source_file": "medlens_pitch_deck.pdf",
+    "text": "The global medical imaging AI market is expected to grow from $2.1B in 2025 to $14.8B by 2032. Radiology faces a critical workforce shortage with 30% of radiologists expected to retire by 2030.",
+    "metadata": {"page": 6, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-015",
+    "deal_id": "DEAL-004",
+    "sector": "Healthcare",
+    "source_file": "medlens_pitch_deck.pdf",
+    "text": "MedLens charges $8 per study with volume discounts for large health systems. At current deployment across 8 health systems, the platform processes 45,000 studies per month generating $360K MRR.",
+    "metadata": {"page": 9, "section": "business_model"}
+  },
+  {
+    "chunk_id": "CHK-016",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_pitch_deck.pdf",
+    "text": "GridShift manages 340 MW of distributed energy resources across 12 utility partnerships. The platform optimizes dispatch of solar, battery storage, and EV chargers to provide grid services including frequency regulation and demand response.",
+    "metadata": {"page": 3, "section": "overview"}
+  },
+  {
+    "chunk_id": "CHK-017",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_pitch_deck.pdf",
+    "text": "Virtual power plants represent a $28B market opportunity by 2030. Regulatory tailwinds from FERC Order 2222 enable DER aggregation to participate in wholesale markets, unlocking $15-25/kW-year in additional revenue for asset owners.",
+    "metadata": {"page": 7, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-018",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_dd_memo.pdf",
+    "text": "GridShift's revenue model combines a SaaS platform fee ($2/kW/month) with a 15% revenue share on grid services payments. Blended gross margin is 71%. Path to profitability by Q2 2026 with current growth trajectory.",
+    "metadata": {"page": 4, "section": "financials"}
+  },
+  {
+    "chunk_id": "CHK-019",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_dd_memo.pdf",
+    "text": "Risk: Utility contract cycles are 18-24 months. GridShift has strong renewal rates (100% to date) but scaling requires significant BD investment. Pipeline of 8 additional utilities in late-stage discussions.",
+    "metadata": {"page": 7, "section": "risks"}
+  },
+  {
+    "chunk_id": "CHK-020",
+    "deal_id": "DEAL-006",
+    "sector": "FinTech",
+    "source_file": "ledgerbase_pitch_deck.pdf",
+    "text": "LedgerBase provides an embedded accounting API that enables vertical SaaS platforms to offer built-in bookkeeping, reconciliation, and financial reporting. Integration takes less than 2 weeks via REST API.",
+    "metadata": {"page": 2, "section": "product"}
+  },
+  {
+    "chunk_id": "CHK-021",
+    "deal_id": "DEAL-006",
+    "sector": "FinTech",
+    "source_file": "ledgerbase_pitch_deck.pdf",
+    "text": "22 platform partners in beta representing 8,500 end SMB customers. MRR of $180K growing 35% month-over-month. Average revenue per platform partner is $8.2K/month with 3.2x net expansion.",
+    "metadata": {"page": 5, "section": "traction"}
+  },
+  {
+    "chunk_id": "CHK-022",
+    "deal_id": "DEAL-006",
+    "sector": "FinTech",
+    "source_file": "ledgerbase_pitch_deck.pdf",
+    "text": "The embedded fintech market is projected to reach $7.2T in transaction volume by 2030. Accounting is the last major back-office function not yet embedded — payroll (Gusto), payments (Stripe), and banking (Unit) have already been unbundled.",
+    "metadata": {"page": 7, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-023",
+    "deal_id": "DEAL-007",
+    "sector": "Healthcare",
+    "source_file": "vitalsign_pitch_deck.pdf",
+    "text": "VitalSign Dx has received FDA 510(k) clearance for three indications: continuous cardiac arrhythmia detection, sleep apnea screening, and non-invasive glucose trending. The wearable biosensor platform uses photoplethysmography and bioimpedance.",
+    "metadata": {"page": 3, "section": "regulatory"}
+  },
+  {
+    "chunk_id": "CHK-024",
+    "deal_id": "DEAL-007",
+    "sector": "Healthcare",
+    "source_file": "vitalsign_pitch_deck.pdf",
+    "text": "Clinical validation: 94% sensitivity and 91% specificity for arrhythmia detection in a 5,000-patient multi-center trial published in JAMA Cardiology. Sleep apnea screening shows 89% concordance with in-lab polysomnography.",
+    "metadata": {"page": 6, "section": "clinical_data"}
+  },
+  {
+    "chunk_id": "CHK-025",
+    "deal_id": "DEAL-007",
+    "sector": "Healthcare",
+    "source_file": "vitalsign_dd_memo.pdf",
+    "text": "VitalSign Dx ARR is $28M growing 120% YoY. 85% of revenue comes from payer-reimbursed RPM programs. Average revenue per patient per month is $95 with 78% gross margin. 18 granted patents protect the core technology.",
+    "metadata": {"page": 3, "section": "financials"}
+  },
+  {
+    "chunk_id": "CHK-026",
+    "deal_id": "DEAL-007",
+    "sector": "Healthcare",
+    "source_file": "vitalsign_dd_memo.pdf",
+    "text": "Strategic value: J&J Innovation is a Series B investor and potential acquirer. Medtronic has also expressed acquisition interest. Rialto's downside is protected by strong standalone business fundamentals plus strategic premium optionality.",
+    "metadata": {"page": 8, "section": "exit_analysis"}
+  },
+  {
+    "chunk_id": "CHK-027",
+    "deal_id": "DEAL-008",
+    "sector": "Climate",
+    "source_file": "aerocarbon_pitch_deck.pdf",
+    "text": "AeroCarbon's novel electrochemical sorbent achieves a 65% energy reduction compared to incumbent thermal DAC approaches (Climeworks). Lab-scale results published in Nature Energy demonstrate 1.2 GJ/tCO2 vs. 3.5 GJ/tCO2 for thermal systems.",
+    "metadata": {"page": 4, "section": "technology"}
+  },
+  {
+    "chunk_id": "CHK-028",
+    "deal_id": "DEAL-008",
+    "sector": "Climate",
+    "source_file": "aerocarbon_pitch_deck.pdf",
+    "text": "The direct air capture market is projected to scale from $500M in 2025 to $40B by 2035, driven by corporate net-zero commitments and government incentives (45Q tax credits at $180/tCO2 for DAC).",
+    "metadata": {"page": 7, "section": "market"}
+  },
+  {
+    "chunk_id": "CHK-029",
+    "deal_id": "DEAL-008",
+    "sector": "Climate",
+    "source_file": "aerocarbon_pitch_deck.pdf",
+    "text": "AeroCarbon has pre-sold 50,000 tonnes of carbon removal credits to Microsoft, Stripe, and Shopify at $350/tonne for delivery starting 2027. Pilot plant in Iceland (partnership with Carbfix) will demonstrate 1,000 tCO2/year capacity.",
+    "metadata": {"page": 9, "section": "traction"}
+  },
+  {
+    "chunk_id": "CHK-030",
+    "deal_id": "DEAL-008",
+    "sector": "Climate",
+    "source_file": "aerocarbon_dd_memo.pdf",
+    "text": "Key risk: Technology has only been demonstrated at lab scale (10 kg CO2/day). Pilot plant construction is underway but operational data expected Q1 2026. Scale-up risk is significant — electrochemical systems have historically faced challenges in maintaining efficiency at industrial scale.",
+    "metadata": {"page": 4, "section": "risks"}
+  },
+  {
+    "chunk_id": "CHK-031",
+    "deal_id": "DEAL-001",
+    "sector": "Healthcare",
+    "source_file": "helix_genomics_financials.xlsx",
+    "text": "Revenue breakdown: 62% from clinical sequencing services, 23% from pharma partnerships (data licensing), 15% from research collaborations. Gross margin 71% and improving as sequencing volume scales.",
+    "metadata": {"page": 1, "section": "revenue_breakdown"}
+  },
+  {
+    "chunk_id": "CHK-032",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_financials.xlsx",
+    "text": "NovaPay revenue breakdown: 78% from transaction fees (25bps average take rate), 15% from SaaS subscription for treasury management module, 7% from FX hedging revenue share. Blended gross margin is 72%.",
+    "metadata": {"page": 1, "section": "revenue_breakdown"}
+  },
+  {
+    "chunk_id": "CHK-033",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_financials.xlsx",
+    "text": "GridShift revenue by segment: 55% SaaS platform fees, 35% grid services revenue share, 10% implementation and consulting. Top 3 utility partners represent 62% of revenue — concentration risk to be monitored.",
+    "metadata": {"page": 1, "section": "revenue_breakdown"}
+  },
+  {
+    "chunk_id": "CHK-034",
+    "deal_id": "DEAL-002",
+    "sector": "Climate",
+    "source_file": "carbonpath_technical_report.pdf",
+    "text": "Validation study across 12 Iowa farms (4,800 acres): CarbonPath measurements correlated at r²=0.94 with lab analysis of soil cores. Mean absolute error of 0.22% SOC. This exceeds the Verra VCS methodology requirements for soil carbon quantification.",
+    "metadata": {"page": 12, "section": "validation"}
+  },
+  {
+    "chunk_id": "CHK-035",
+    "deal_id": "DEAL-004",
+    "sector": "Healthcare",
+    "source_file": "medlens_technical_whitepaper.pdf",
+    "text": "MedLens foundation model architecture: Vision transformer (ViT-L) pretrained via masked image modeling on 12M scans, then fine-tuned per condition with as few as 500 labeled examples. Inference time is 1.2 seconds per study on standard GPU hardware.",
+    "metadata": {"page": 4, "section": "architecture"}
+  },
+  {
+    "chunk_id": "CHK-036",
+    "deal_id": "DEAL-006",
+    "sector": "FinTech",
+    "source_file": "ledgerbase_api_docs.pdf",
+    "text": "LedgerBase API supports real-time GL posting, automated bank reconciliation, multi-entity consolidation, and configurable financial report generation. Webhooks notify the host platform of reconciliation exceptions and month-end close status.",
+    "metadata": {"page": 8, "section": "api_capabilities"}
+  },
+  {
+    "chunk_id": "CHK-037",
+    "deal_id": "DEAL-007",
+    "sector": "Healthcare",
+    "source_file": "vitalsign_regulatory_summary.pdf",
+    "text": "VitalSign Dx regulatory timeline: Cardiac arrhythmia 510(k) cleared March 2024, sleep apnea cleared August 2024, glucose trending cleared January 2025. Pipeline: blood pressure estimation (submission Q2 2025), respiratory rate (Q4 2025).",
+    "metadata": {"page": 2, "section": "timeline"}
+  },
+  {
+    "chunk_id": "CHK-038",
+    "deal_id": "DEAL-008",
+    "sector": "Climate",
+    "source_file": "aerocarbon_nature_paper.pdf",
+    "text": "The electrochemical swing adsorption process uses a pH-swing mechanism with redox-active quinone electrodes. CO2 is captured from air at ambient conditions and released at mild temperatures (60°C), enabling 65% energy reduction vs. thermal swing approaches.",
+    "metadata": {"page": 1, "section": "abstract"}
+  },
+  {
+    "chunk_id": "CHK-039",
+    "deal_id": "DEAL-003",
+    "sector": "FinTech",
+    "source_file": "novapay_security_audit.pdf",
+    "text": "Independent SOC 2 Type II audit completed by Deloitte (2025). Zero critical findings. NovaPay maintains PCI DSS Level 1 certification. Penetration testing by CrowdStrike identified 2 medium-severity issues, both remediated within 48 hours.",
+    "metadata": {"page": 1, "section": "security_overview"}
+  },
+  {
+    "chunk_id": "CHK-040",
+    "deal_id": "DEAL-005",
+    "sector": "Climate",
+    "source_file": "gridshift_utility_contracts.pdf",
+    "text": "Standard utility contract terms: 5-year initial term with 2-year auto-renewal. Performance guarantees on dispatch accuracy (>98%) and availability (>99.5%). Revenue share model aligns incentives — GridShift only earns when the utility earns from grid services.",
+    "metadata": {"page": 3, "section": "contract_terms"}
+  }
+]
