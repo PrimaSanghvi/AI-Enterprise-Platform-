@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Shield,
   Lock,
@@ -8,11 +8,8 @@ import {
   Play,
   Grid3x3,
   Search,
-  AlertTriangle,
   CheckCircle2,
   XCircle,
-  ChevronDown,
-  ChevronRight,
   Layers,
   ToggleLeft,
   ToggleRight,

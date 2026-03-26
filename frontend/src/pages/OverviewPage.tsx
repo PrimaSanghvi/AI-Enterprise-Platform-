@@ -7,7 +7,6 @@ import {
   MessageSquare,
   Share2,
   FileText,
-  Activity,
   BookOpen,
   ArrowRight,
   Briefcase,
