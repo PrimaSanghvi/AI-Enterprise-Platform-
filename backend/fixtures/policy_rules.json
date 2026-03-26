@@ -1,0 +1,305 @@
+[
+  {
+    "id": "POL-001",
+    "role": "Analyst",
+    "connector": "Backstop CRM",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [
+      "ask_amount",
+      "valuation",
+      "lead_partner"
+    ],
+    "rowFilters": {
+      "business_unit": [
+        "Technology",
+        "Healthcare"
+      ]
+    },
+    "enabled": true,
+    "description": "Analysts can read and search deals in permitted business units; financial fields masked per compliance policy",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-002",
+    "role": "Analyst",
+    "connector": "File Server",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {
+      "folder_acl": [
+        "public",
+        "investment_team"
+      ]
+    },
+    "enabled": true,
+    "description": "Analysts can read and search files within permitted folder ACLs; no write access to enforce document integrity",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-003",
+    "role": "Analyst",
+    "connector": "Neo4j Graph",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [
+      "risk_score",
+      "compliance_flags"
+    ],
+    "rowFilters": {
+      "max_subgraph_depth": [
+        "2"
+      ]
+    },
+    "enabled": false,
+    "description": "Analyst graph access disabled pending security review; sensitive relationship attributes redacted",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-004",
+    "role": "Analyst",
+    "connector": "Snowflake",
+    "operations": [
+      "Read"
+    ],
+    "fieldRestrictions": [
+      "ssn",
+      "tax_id",
+      "salary",
+      "personal_email"
+    ],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Analysts can query Snowflake analytics; PII columns masked by DLP policy",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-005",
+    "role": "Analyst",
+    "connector": "Pinecone",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {
+      "namespace": [
+        "public_docs",
+        "investment_memos"
+      ]
+    },
+    "enabled": true,
+    "description": "Analysts can search vector embeddings within permitted namespaces for document retrieval",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-006",
+    "role": "Analyst",
+    "connector": "Appian",
+    "operations": [
+      "Read"
+    ],
+    "fieldRestrictions": [
+      "approval_chain",
+      "escalation_path"
+    ],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Analysts can view workflow status; approval chain details restricted to senior roles",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-007",
+    "role": "Senior Analyst",
+    "connector": "Backstop CRM",
+    "operations": [
+      "Read",
+      "Search",
+      "Write"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Senior Analysts have full read/write access to Backstop CRM deal records across all business units",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-008",
+    "role": "Senior Analyst",
+    "connector": "File Server",
+    "operations": [
+      "Read",
+      "Search",
+      "Write"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Senior Analysts can read, search, and upload files; naming convention enforcement applied on write operations",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-009",
+    "role": "Senior Analyst",
+    "connector": "Neo4j Graph",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [
+      "compliance_flags"
+    ],
+    "rowFilters": {
+      "max_subgraph_depth": [
+        "3"
+      ]
+    },
+    "enabled": true,
+    "description": "Senior Analysts can query entity relationships with extended subgraph depth; compliance flags remain redacted",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-010",
+    "role": "Senior Analyst",
+    "connector": "Snowflake",
+    "operations": [
+      "Read",
+      "Search"
+    ],
+    "fieldRestrictions": [
+      "ssn",
+      "tax_id"
+    ],
+    "rowFilters": {},
+    "enabled": false,
+    "description": "Senior Analysts can read and search Snowflake analytics; core PII fields remain masked",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-011",
+    "role": "Senior Analyst",
+    "connector": "Pinecone",
+    "operations": [
+      "Read",
+      "Search",
+      "Write"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Senior Analysts can query and upsert vectors; all writes must be idempotent with deterministic vector IDs",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-012",
+    "role": "Senior Analyst",
+    "connector": "Appian",
+    "operations": [
+      "Read",
+      "Action"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Senior Analysts can view workflows and trigger approved actions such as deal assignment and stage transitions",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-013",
+    "role": "Platform Admin",
+    "connector": "Backstop CRM",
+    "operations": [
+      "Read",
+      "Search",
+      "Write",
+      "Action"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Platform Admins have unrestricted access to all Backstop CRM operations including owner reassignment",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-014",
+    "role": "Platform Admin",
+    "connector": "File Server",
+    "operations": [
+      "Read",
+      "Search",
+      "Write",
+      "Action"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Platform Admins have full file server access including move, rename, and ACL management operations",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-015",
+    "role": "Platform Admin",
+    "connector": "Snowflake",
+    "operations": [
+      "Read",
+      "Search",
+      "Write"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Platform Admins can read, search, and write to Snowflake analytics layer with no column restrictions",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-016",
+    "role": "Platform Admin",
+    "connector": "Neo4j Graph",
+    "operations": [
+      "Read",
+      "Search",
+      "Write"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Platform Admins can read, query, and upsert graph nodes and edges with full attribute visibility",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-017",
+    "role": "Platform Admin",
+    "connector": "Pinecone",
+    "operations": [
+      "Read",
+      "Search",
+      "Write",
+      "Action"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Platform Admins have full Pinecone access including vector deletion and index management operations",
+    "createdAt": "2025-10-15T09:00:00Z"
+  },
+  {
+    "id": "POL-018",
+    "role": "Analyst",
+    "connector": "Backstop CRM",
+    "operations": [
+      "Read"
+    ],
+    "fieldRestrictions": [],
+    "rowFilters": {},
+    "enabled": true,
+    "description": "Describe what this rule permits?",
+    "createdAt": "2026-03-26T03:49:16.702469+00:00"
+  }
+]

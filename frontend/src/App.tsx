@@ -6,15 +6,18 @@ import { ChatView } from "./components/chat/ChatView";
 import RAGPipelinePage from "./pages/RAGPipelinePage";
 import GraphExplorerPage from "./pages/GraphExplorerPage";
 import AuditLogsPage from "./pages/AuditLogsPage";
+import PolicyEnginePage from "./pages/PolicyEnginePage";
+import GlossaryPage from "./pages/GlossaryPage";
+import OverviewPage from "./pages/OverviewPage";
 import { useDeals } from "./hooks/useDeals";
 import { useTriageStream } from "./hooks/useTriageStream";
 import { useChatThreads } from "./hooks/useChatThreads";
 import { useChat } from "./hooks/useChat";
 
-type ActivePage = "deals" | "chat" | "rag" | "graph" | "audit";
+type ActivePage = "overview" | "deals" | "chat" | "rag" | "graph" | "audit" | "policy" | "glossary";
 
 function App() {
-  const [activePage, setActivePage] = useState<ActivePage>("deals");
+  const [activePage, setActivePage] = useState<ActivePage>("overview");
   const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
   const { deals, loading, error, refetch } = useDeals();
   const { state: triageState, startTriage, reset } = useTriageStream();
@@ -51,6 +54,9 @@ function App() {
         onNavigate={setActivePage}
       />
       <main className="flex-1 flex flex-col overflow-hidden">
+        {activePage === "overview" && (
+          <OverviewPage onNavigate={setActivePage} />
+        )}
         {activePage === "deals" && (
           <>
             <div className="flex-1 overflow-y-auto">
@@ -95,6 +101,8 @@ function App() {
         {activePage === "rag" && <RAGPipelinePage />}
         {activePage === "graph" && <GraphExplorerPage />}
         {activePage === "audit" && <AuditLogsPage />}
+        {activePage === "policy" && <PolicyEnginePage />}
+        {activePage === "glossary" && <GlossaryPage />}
       </main>
     </div>
   );

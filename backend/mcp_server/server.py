@@ -7,9 +7,11 @@ from backend.mcp_server.tools.graph_tools import register_tools as register_grap
 from backend.mcp_server.tools.snowflake_tools import register_tools as register_snowflake
 from backend.mcp_server.tools.retrieval_tools import register_tools as register_retrieval
 from backend.mcp_server.tools.files_tools import register_tools as register_files
+from backend.mcp_server.tools.policy_tools import register_tools as register_policy
 
 register_backstop(mcp)
 register_graph(mcp)
 register_snowflake(mcp)
 register_retrieval(mcp)
 register_files(mcp)
+register_policy(mcp)

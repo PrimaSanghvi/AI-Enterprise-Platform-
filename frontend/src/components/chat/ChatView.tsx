@@ -251,15 +251,75 @@ export function ChatView({
 
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {messages.length === 0 && !isStreaming && (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
+          <div className="flex flex-col items-center justify-center h-full">
             <div className="text-3xl mb-3">💬</div>
-            <p className="text-sm font-medium text-gray-500">
+            <p className="text-sm font-medium text-gray-500 mb-1">
               Ask about any deal in the pipeline
             </p>
-            <p className="text-xs text-gray-400 mt-1">
-              e.g. "Tell me about Helix Genomics" or "Compare the Healthcare
-              deals"
+            <p className="text-xs text-gray-400 mb-6">
+              Click a suggestion or type your own question
             </p>
+
+            <div className="max-w-lg w-full space-y-4">
+              {/* Deal Lookup */}
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Deal Lookup</span>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Tell me about Helix Genomics",
+                    "What is the status of the AeroCarbon deal?",
+                    "Who is the lead partner on NovaPay?",
+                  ].map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendMessage(q)}
+                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Comparison & Analysis */}
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Comparison & Analysis</span>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Compare the Healthcare sector deals",
+                    "Which deals are in due diligence?",
+                    "What are the highest valuation deals?",
+                  ].map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendMessage(q)}
+                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Relationships & Context */}
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Relationships & Context</span>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Show investor relationships for Helix Genomics",
+                    "What portfolio overlap exists in Climate sector?",
+                  ].map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendMessage(q)}
+                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

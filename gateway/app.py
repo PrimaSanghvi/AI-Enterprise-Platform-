@@ -191,6 +191,119 @@ async def audit_logs():
     return generate_audit_logs()
 
 
+# ── Policy Engine endpoints ──────────────────────────────────────────
+
+
+@app.get("/policy/rules")
+async def list_policy_rules(role: str = "", connector: str = ""):
+    """Return all policy rules, optionally filtered by role and/or connector."""
+    from backend.connectors.policy import list_rules
+
+    return list_rules(role=role, connector=connector)
+
+
+@app.get("/policy/rules/{rule_id}")
+async def get_policy_rule(rule_id: str):
+    """Return a single policy rule by ID."""
+    from backend.connectors.policy import get_rule
+
+    rule = get_rule(rule_id)
+    if not rule:
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse(status_code=404, content={"error": f"Rule {rule_id} not found"})
+    return rule
+
+
+class CreatePolicyRuleRequest(BaseModel):
+    role: str
+    connector: str
+    operations: list[str]
+    fieldRestrictions: list[str] = []
+    rowFilters: dict = {}
+    description: str = ""
+    enabled: bool = True
+
+
+@app.post("/policy/rules")
+async def create_policy_rule(body: CreatePolicyRuleRequest):
+    """Create a new policy rule."""
+    from backend.connectors.policy import create_rule
+
+    rule = create_rule(
+        role=body.role,
+        connector=body.connector,
+        operations=body.operations,
+        field_restrictions=body.fieldRestrictions,
+        row_filters=body.rowFilters,
+        description=body.description,
+        enabled=body.enabled,
+    )
+    return rule
+
+
+class UpdatePolicyRuleRequest(BaseModel):
+    role: str | None = None
+    connector: str | None = None
+    operations: list[str] | None = None
+    fieldRestrictions: list[str] | None = None
+    rowFilters: dict | None = None
+    description: str | None = None
+    enabled: bool | None = None
+
+
+@app.put("/policy/rules/{rule_id}")
+async def update_policy_rule(rule_id: str, body: UpdatePolicyRuleRequest):
+    """Update an existing policy rule."""
+    from backend.connectors.policy import update_rule
+
+    updates = {k: v for k, v in body.model_dump().items() if v is not None}
+    result = update_rule(rule_id, updates)
+    if not result:
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse(status_code=404, content={"error": f"Rule {rule_id} not found"})
+    return result
+
+
+@app.delete("/policy/rules/{rule_id}")
+async def delete_policy_rule(rule_id: str):
+    """Delete a policy rule."""
+    from backend.connectors.policy import delete_rule
+
+    deleted = delete_rule(rule_id)
+    if not deleted:
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse(status_code=404, content={"error": f"Rule {rule_id} not found"})
+    return {"status": "deleted", "rule_id": rule_id}
+
+
+class SimulatePolicyRequest(BaseModel):
+    role: str
+    connector: str
+    operation: str
+    fields: list[str] = []
+
+
+@app.post("/policy/simulate")
+async def simulate_policy(body: SimulatePolicyRequest, request: Request):
+    """Evaluate a policy request via the MCP policy engine. Returns decision + reasoning trace."""
+    await ensure_mcp_connected(request)
+    mcp_client: MCPClient = request.app.state.mcp
+    fields_str = ",".join(body.fields) if body.fields else ""
+    raw = await mcp_client.call_tool(
+        "policy.evaluate",
+        {
+            "role": body.role,
+            "connector": body.connector,
+            "operation": body.operation,
+            "fields": fields_str,
+        },
+    )
+    return json.loads(raw)
+
+
 @app.get("/rag/stats")
 async def rag_stats():
     """Return live RAG pipeline stats from the backend vector store."""

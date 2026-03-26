@@ -1,14 +1,16 @@
 import { useState } from "react";
 
-type ActivePage = "deals" | "chat" | "rag" | "graph" | "audit";
+type ActivePage = "overview" | "deals" | "chat" | "rag" | "graph" | "audit" | "policy" | "glossary";
 
 /* ── Navigation items ── */
 const navItems: { id: ActivePage; label: string; icon: string }[] = [
+  { id: "overview", label: "Overview", icon: "🏠" },
   { id: "deals", label: "Deal Pipeline", icon: "📊" },
   { id: "chat", label: "AI Chat", icon: "💬" },
-  { id: "rag", label: "RAG Pipeline", icon: "🔗" },
   { id: "graph", label: "Graph Explorer", icon: "🕸️" },
   { id: "audit", label: "Audit Logs", icon: "📋" },
+  { id: "policy", label: "Policy Engine", icon: "🛡️" },
+  { id: "glossary", label: "Glossary", icon: "📖" },
 ];
 
 interface SidebarProps {
