@@ -32,17 +32,16 @@ export function Sidebar({
     >
       {/* Branding */}
       <div className="flex items-center gap-3 px-4 h-14 border-b border-gray-800 shrink-0">
-        {!collapsed ? (
+        <img src="/cogniify_logo.png" alt="Cogniify" className="h-8 w-8 shrink-0 object-contain" />
+        {!collapsed && (
           <div className="flex flex-col">
             <span className="text-sm font-bold text-white tracking-tight leading-none">
-              RIALTO
+              COGNIIFY
             </span>
             <span className="text-[9px] text-gray-500 font-semibold tracking-wider mt-0.5">
               AI ENTERPRISE PLATFORM
             </span>
           </div>
-        ) : (
-          <span className="text-sm font-bold text-white">R</span>
         )}
       </div>
 
