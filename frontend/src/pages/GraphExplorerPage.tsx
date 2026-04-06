@@ -206,7 +206,7 @@ export default function GraphExplorerPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="flex items-center gap-3 text-gray-400">
+        <div className="flex items-center gap-3 text-[var(--text-muted)]">
           <div className="w-5 h-5 border-2 border-gray-600 border-t-blue-500 rounded-full animate-spin" />
           <span className="text-sm">Loading graph data...</span>
         </div>
@@ -228,13 +228,13 @@ export default function GraphExplorerPage() {
   const relationshipTypes = new Set(edges.map((e) => e.relationship));
 
   return (
-    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[#050911]">
+    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[var(--bg-page)]">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-100 tracking-tight">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
           Graph Explorer
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-[var(--text-secondary)] mt-1">
           Neo4j entity relationships — companies, investors, board members, competitors & partners
         </p>
       </div>
@@ -274,13 +274,13 @@ export default function GraphExplorerPage() {
         ].map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 transition-colors hover:border-[#2a3a55]"
+            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 transition-colors hover:border-[var(--border-color)]"
           >
-            <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)]">
               {kpi.label}
             </span>
             <div
-              className={`text-xl font-bold text-gray-100 mt-1 ${kpi.mono ? "font-mono" : ""}`}
+              className={`text-xl font-bold text-[var(--text-primary)] mt-1 ${kpi.mono ? "font-mono" : ""}`}
             >
               {kpi.value}
             </div>
@@ -293,21 +293,21 @@ export default function GraphExplorerPage() {
       <div className="flex gap-3 items-center">
         <div className="flex-1 relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"
             size={16}
           />
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entities by name or type..."
-            className="w-full bg-[#0f1729] rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-200 placeholder:text-gray-600 outline-none border border-[#1e2d47] focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
+            className="w-full bg-[var(--bg-card-alt)] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] outline-none border border-[var(--border-color)] focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
           />
         </div>
         <div className="flex gap-2">
           {entityTypes.map((type) => (
             <div
               key={type}
-              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#0f1729] border border-[#1e2d47] text-xs text-gray-400"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[var(--bg-card-alt)] border border-[var(--border-color)] text-xs text-[var(--text-muted)]"
             >
               <span
                 className="w-2 h-2 rounded-full shrink-0"
@@ -323,7 +323,7 @@ export default function GraphExplorerPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Graph Canvas */}
         <div
-          className="lg:col-span-2 bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-0 overflow-hidden transition-colors hover:border-[#2a3a55]"
+          className="lg:col-span-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-0 overflow-hidden transition-colors hover:border-[var(--border-color)]"
           style={{ height: 520 }}
         >
           <svg viewBox="0 0 100 90" className="w-full h-full">
@@ -417,7 +417,7 @@ export default function GraphExplorerPage() {
         </div>
 
         {/* Detail Panel */}
-        <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 transition-colors hover:border-[#2a3a55]">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 transition-colors hover:border-[var(--border-color)]">
           {selectedNode ? (
             <div className="space-y-4 animate-[fadeIn_0.4s_ease-out]">
               {/* Header */}
@@ -428,11 +428,11 @@ export default function GraphExplorerPage() {
                 >
                   {(() => {
                     const Icon = TYPE_ICON[selectedNode.type] || Network;
-                    return <Icon className="w-4 h-4 text-gray-200" />;
+                    return <Icon className="w-4 h-4 text-[var(--text-primary)]" />;
                   })()}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-100">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">
                     {selectedNode.label}
                   </h3>
                   <span
@@ -450,24 +450,24 @@ export default function GraphExplorerPage() {
               {/* Metadata */}
               <div className="space-y-2">
                 {selectedNode.sector && (
-                  <div className="flex justify-between text-xs py-1 border-b border-[#1e2d47]/60">
-                    <span className="text-gray-500">Sector</span>
-                    <span className="font-mono text-gray-200 font-bold">
+                  <div className="flex justify-between text-xs py-1 border-b border-[var(--border-color)]/60">
+                    <span className="text-[var(--text-secondary)]">Sector</span>
+                    <span className="font-mono text-[var(--text-primary)] font-bold">
                       {selectedNode.sector}
                     </span>
                   </div>
                 )}
                 {selectedNode.stage && (
-                  <div className="flex justify-between text-xs py-1 border-b border-[#1e2d47]/60">
-                    <span className="text-gray-500">Stage</span>
-                    <span className="font-mono text-gray-200 font-bold">
+                  <div className="flex justify-between text-xs py-1 border-b border-[var(--border-color)]/60">
+                    <span className="text-[var(--text-secondary)]">Stage</span>
+                    <span className="font-mono text-[var(--text-primary)] font-bold">
                       {selectedNode.stage}
                     </span>
                   </div>
                 )}
-                <div className="flex justify-between text-xs py-1 border-b border-[#1e2d47]/60">
-                  <span className="text-gray-500">Connections</span>
-                  <span className="font-mono text-gray-200 font-bold">
+                <div className="flex justify-between text-xs py-1 border-b border-[var(--border-color)]/60">
+                  <span className="text-[var(--text-secondary)]">Connections</span>
+                  <span className="font-mono text-[var(--text-primary)] font-bold">
                     {connectedEdges.length}
                   </span>
                 </div>
@@ -476,7 +476,7 @@ export default function GraphExplorerPage() {
               {/* Connected entities */}
               {connectedNodes.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-2">
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-secondary)] mb-2">
                     Connected Entities
                   </p>
                   <div className="space-y-1.5 max-h-48 overflow-y-auto">
@@ -490,7 +490,7 @@ export default function GraphExplorerPage() {
                         <button
                           key={i}
                           onClick={() => setSelected(other.id)}
-                          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[#0f1729]/50 hover:bg-[#0f1729] border border-transparent hover:border-[#1e2d47] transition-colors text-left"
+                          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[var(--bg-card-alt)]/50 hover:bg-[var(--bg-card-alt)] border border-transparent hover:border-[var(--border-color)] transition-colors text-left"
                         >
                           <span
                             className="w-2 h-2 rounded-full shrink-0"
@@ -499,10 +499,10 @@ export default function GraphExplorerPage() {
                                 TYPE_FILL[other.type as NodeType] || "#9ca3af",
                             }}
                           />
-                          <span className="text-xs text-gray-200 font-medium flex-1 truncate">
+                          <span className="text-xs text-[var(--text-primary)] font-medium flex-1 truncate">
                             {other.label}
                           </span>
-                          <span className="text-[9px] font-mono text-gray-500 shrink-0">
+                          <span className="text-[9px] font-mono text-[var(--text-secondary)] shrink-0">
                             {isOutgoing ? "" : "\u2190 "}
                             {edge.relationship.replace(/_/g, " ")}
                           </span>
@@ -522,7 +522,7 @@ export default function GraphExplorerPage() {
                       AI Entity Summary
                     </p>
                   </div>
-                  <p className="text-xs text-gray-300 leading-relaxed">
+                  <p className="text-xs text-[var(--text-primary)] leading-relaxed">
                     {selectedNode.details}
                   </p>
                 </div>
@@ -530,9 +530,9 @@ export default function GraphExplorerPage() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center py-16">
-              <Network className="w-10 h-10 text-gray-700 mb-3" />
-              <p className="text-sm text-gray-500">Click any node to explore</p>
-              <p className="text-xs text-gray-600 mt-1">
+              <Network className="w-10 h-10 text-[var(--text-secondary)] mb-3" />
+              <p className="text-sm text-[var(--text-secondary)]">Click any node to explore</p>
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
                 {nodes.length} entities &middot; {edges.length} relationships
               </p>
             </div>

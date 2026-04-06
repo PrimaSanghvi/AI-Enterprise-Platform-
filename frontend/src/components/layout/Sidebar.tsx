@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { useTenant } from "../../contexts/TenantContext";
 
 type ActivePage = "overview" | "deals" | "chat" | "rag" | "graph" | "audit" | "policy" | "glossary";
 
@@ -23,23 +26,25 @@ export function Sidebar({
   onNavigate,
 }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const tenant = useTenant();
 
   return (
     <aside
-      className={`bg-gray-900 border-r border-gray-800 shrink-0 flex flex-col h-full overflow-hidden transition-all duration-300 ${
+      className={`bg-[var(--bg-sidebar)] border-r border-[var(--border-sidebar)] shrink-0 flex flex-col h-full overflow-hidden transition-all duration-300 ${
         collapsed ? "w-16" : "w-56"
       }`}
     >
       {/* Branding */}
-      <div className="flex items-center gap-3 px-4 h-14 border-b border-gray-800 shrink-0">
-        <img src="/cogniify_logo.png" alt="Cogniify" className="h-8 w-8 shrink-0 object-contain" />
+      <div className="flex items-center gap-3 px-4 h-14 border-b border-[var(--border-sidebar)] shrink-0">
+        <img src={tenant.logo} alt={tenant.name} className="h-8 w-8 shrink-0 object-contain" />
         {!collapsed && (
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-white tracking-tight leading-none">
-              COGNIIFY
+            <span className="text-sm font-bold text-[var(--sidebar-brand)] tracking-tight leading-none">
+              {tenant.name}
             </span>
-            <span className="text-[9px] text-gray-500 font-semibold tracking-wider mt-0.5">
-              AI ENTERPRISE PLATFORM
+            <span className="text-[9px] text-[var(--sidebar-brand-sub)] font-semibold tracking-wider mt-0.5">
+              {tenant.subtitle}
             </span>
           </div>
         )}
@@ -56,8 +61,8 @@ export function Sidebar({
               title={collapsed ? item.label : undefined}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? "bg-indigo-600/20 text-indigo-400"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800"
+                  ? "bg-[var(--bg-sidebar-active)] text-[var(--sidebar-text-active)]"
+                  : "text-[var(--sidebar-text)] hover:text-[var(--sidebar-brand)] hover:bg-[var(--bg-sidebar-hover)]"
               }`}
             >
               <span className="text-base shrink-0">{item.icon}</span>
@@ -70,11 +75,29 @@ export function Sidebar({
       {/* Spacer */}
       <div className="flex-1" />
 
+      {/* Theme toggle */}
+      <div className="px-2 shrink-0">
+        <button
+          onClick={toggleTheme}
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[var(--sidebar-text)] hover:text-[var(--sidebar-brand)] hover:bg-[var(--bg-sidebar-hover)] transition-colors text-sm"
+        >
+          {theme === "dark" ? (
+            <Sun className="w-4 h-4 shrink-0 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 shrink-0 text-indigo-500" />
+          )}
+          {!collapsed && (
+            <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+          )}
+        </button>
+      </div>
+
       {/* Collapse button */}
-      <div className="border-t border-gray-800 p-2 shrink-0">
+      <div className="border-t border-[var(--border-sidebar)] p-2 shrink-0">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors text-sm"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[var(--sidebar-text)] hover:text-[var(--sidebar-brand)] hover:bg-[var(--bg-sidebar-hover)] transition-colors text-sm"
         >
           <span className="text-base shrink-0">{collapsed ? "▶" : "◀"}</span>
           {!collapsed && <span>Collapse</span>}

@@ -54,7 +54,7 @@ function opColor(op: string) {
     case "Action":
       return "bg-rose-500/15 text-rose-400 border-rose-500/20";
     default:
-      return "bg-gray-500/15 text-gray-400 border-gray-500/20";
+      return "bg-gray-500/15 text-[var(--text-muted)] border-gray-500/20";
   }
 }
 
@@ -67,16 +67,16 @@ function roleColor(role: string) {
     case "Platform Admin":
       return "bg-amber-500/15 text-amber-400";
     default:
-      return "bg-gray-500/15 text-gray-400";
+      return "bg-gray-500/15 text-[var(--text-muted)]";
   }
 }
 
 const selectClass =
-  "bg-[#0c1220] border border-[#1e2d47] text-gray-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500";
+  "bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500";
 const btnPrimary =
   "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5";
 const btnGhost =
-  "text-gray-400 hover:text-white hover:bg-[#1e2d47]/50 text-xs px-3 py-2 rounded-lg transition-colors";
+  "text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-hover)] text-xs px-3 py-2 rounded-lg transition-colors";
 
 type Tab = "builder" | "matrix" | "simulate";
 
@@ -222,14 +222,14 @@ export default function PolicyEnginePage() {
   /* ── Loading / Error ── */
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#050911]">
-        <div className="text-gray-500 text-sm">Loading policy rules…</div>
+      <div className="flex-1 flex items-center justify-center bg-[var(--bg-page)]">
+        <div className="text-[var(--text-secondary)] text-sm">Loading policy rules…</div>
       </div>
     );
   }
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#050911]">
+      <div className="flex-1 flex items-center justify-center bg-[var(--bg-page)]">
         <div className="text-rose-400 text-sm">{error}</div>
       </div>
     );
@@ -239,14 +239,14 @@ export default function PolicyEnginePage() {
      Render
      ══════════════════════════════════════════════════════════════════════ */
   return (
-    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[#050911]">
+    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[var(--bg-page)]">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-indigo-400" />
-          <h1 className="text-2xl font-bold text-gray-100">Policy Engine</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Policy Engine</h1>
         </div>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-[var(--text-secondary)] mt-1">
           RBAC governance for MCP connectors — manage rules, view coverage, and
           simulate access decisions
         </p>
@@ -286,22 +286,22 @@ export default function PolicyEnginePage() {
         ].map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4"
+            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4"
           >
             <div className="flex items-center gap-2 mb-2">
               <kpi.icon className={`w-3.5 h-3.5 ${kpi.color}`} />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)]">
                 {kpi.label}
               </span>
             </div>
-            <div className="text-xl font-bold text-gray-100">{kpi.value}</div>
-            <span className="text-xs font-mono text-gray-500">{kpi.sub}</span>
+            <div className="text-xl font-bold text-[var(--text-primary)]">{kpi.value}</div>
+            <span className="text-xs font-mono text-[var(--text-secondary)]">{kpi.sub}</span>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-[#0c1220] border border-[#1e2d47] rounded-xl p-1 w-fit">
+      <div className="flex gap-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-1 w-fit">
         {(
           [
             { id: "builder", label: "Rule Builder", icon: Shield },
@@ -315,7 +315,7 @@ export default function PolicyEnginePage() {
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
               activeTab === tab.id
                 ? "bg-indigo-600/20 text-indigo-400"
-                : "text-gray-400 hover:text-white hover:bg-[#1e2d47]/50"
+                : "text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-hover)]"
             }`}
           >
             <tab.icon className="w-3.5 h-3.5" />
@@ -365,13 +365,13 @@ export default function PolicyEnginePage() {
 
           {/* New-rule form */}
           {showNewRule && (
-            <div className="bg-[#0c1220] border border-indigo-500/30 rounded-2xl p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-gray-100">
+            <div className="bg-[var(--bg-card)] border border-indigo-500/30 rounded-2xl p-5 space-y-4">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 New Policy Rule
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+                  <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                     Role
                   </label>
                   <select
@@ -387,7 +387,7 @@ export default function PolicyEnginePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+                  <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                     Connector
                   </label>
                   <select
@@ -404,7 +404,7 @@ export default function PolicyEnginePage() {
                 </div>
               </div>
               <div>
-                <label className="text-[11px] font-mono uppercase text-gray-500 mb-2 block">
+                <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-2 block">
                   Operations
                 </label>
                 <div className="flex gap-2">
@@ -414,7 +414,7 @@ export default function PolicyEnginePage() {
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium cursor-pointer transition-colors ${
                         newOps.has(op)
                           ? opColor(op)
-                          : "border-[#1e2d47] text-gray-500"
+                          : "border-[var(--border-color)] text-[var(--text-secondary)]"
                       }`}
                     >
                       <input
@@ -434,18 +434,18 @@ export default function PolicyEnginePage() {
                 </div>
               </div>
               <div>
-                <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+                <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                   Field Restrictions (comma-separated)
                 </label>
                 <input
                   value={newFields}
                   onChange={(e) => setNewFields(e.target.value)}
                   placeholder="e.g. ssn, tax_id, salary"
-                  className="bg-[#050911] border border-[#1e2d47] text-gray-300 text-xs rounded-lg px-3 py-2 w-full focus:outline-none focus:border-indigo-500"
+                  className="bg-[var(--bg-page)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs rounded-lg px-3 py-2 w-full focus:outline-none focus:border-indigo-500"
                 />
               </div>
               <div>
-                <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+                <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                   Description
                 </label>
                 <textarea
@@ -453,7 +453,7 @@ export default function PolicyEnginePage() {
                   onChange={(e) => setNewDesc(e.target.value)}
                   rows={2}
                   placeholder="Describe what this rule permits or restricts…"
-                  className="bg-[#050911] border border-[#1e2d47] text-gray-300 text-xs rounded-lg px-3 py-2 w-full focus:outline-none focus:border-indigo-500 resize-none"
+                  className="bg-[var(--bg-page)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs rounded-lg px-3 py-2 w-full focus:outline-none focus:border-indigo-500 resize-none"
                 />
               </div>
               <div className="flex gap-2 justify-end">
@@ -480,15 +480,15 @@ export default function PolicyEnginePage() {
             {filtered.map((rule) => (
               <div
                 key={rule.id}
-                className={`bg-[#0c1220] border rounded-2xl p-4 transition-colors ${
+                className={`bg-[var(--bg-card)] border rounded-2xl p-4 transition-colors ${
                   rule.enabled
-                    ? "border-[#1e2d47]"
-                    : "border-[#1e2d47]/50 opacity-60"
+                    ? "border-[var(--border-color)]"
+                    : "border-[var(--border-color)]/50 opacity-60"
                 }`}
               >
                 {/* Top row: ID + role + connector + toggle */}
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] font-mono text-gray-500">
+                  <span className="text-[10px] font-mono text-[var(--text-secondary)]">
                     {rule.id}
                   </span>
                   <span
@@ -496,24 +496,24 @@ export default function PolicyEnginePage() {
                   >
                     {rule.role}
                   </span>
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-500/15 text-gray-400">
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-500/15 text-[var(--text-muted)]">
                     {rule.connector}
                   </span>
                   <div className="flex-1" />
                   <button
                     onClick={() => handleToggle(rule)}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-[var(--text-muted)] hover:text-white transition-colors"
                     title={rule.enabled ? "Disable rule" : "Enable rule"}
                   >
                     {rule.enabled ? (
                       <ToggleRight className="w-5 h-5 text-emerald-400" />
                     ) : (
-                      <ToggleLeft className="w-5 h-5 text-gray-500" />
+                      <ToggleLeft className="w-5 h-5 text-[var(--text-secondary)]" />
                     )}
                   </button>
                   <button
                     onClick={() => handleDelete(rule.id)}
-                    className="text-gray-500 hover:text-rose-400 transition-colors"
+                    className="text-[var(--text-secondary)] hover:text-rose-400 transition-colors"
                     title="Delete rule"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -533,7 +533,7 @@ export default function PolicyEnginePage() {
                 </div>
 
                 {/* Description */}
-                <p className="text-xs text-gray-400 mb-2 line-clamp-2">
+                <p className="text-xs text-[var(--text-muted)] mb-2 line-clamp-2">
                   {rule.description}
                 </p>
 
@@ -563,7 +563,7 @@ export default function PolicyEnginePage() {
           </div>
 
           {filtered.length === 0 && (
-            <div className="text-center text-gray-500 text-sm py-12">
+            <div className="text-center text-[var(--text-secondary)] text-sm py-12">
               No rules match the current filters.
             </div>
           )}
@@ -572,17 +572,17 @@ export default function PolicyEnginePage() {
 
       {/* ── Tab: Coverage Matrix ── */}
       {activeTab === "matrix" && (
-        <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl overflow-hidden">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#1e2d47]">
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500">
+              <tr className="border-b border-[var(--border-color)]">
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">
                   Role / Connector
                 </th>
                 {CONNECTORS.map((c) => (
                   <th
                     key={c}
-                    className="px-3 py-3 text-center font-mono text-[10px] uppercase tracking-wider text-gray-500"
+                    className="px-3 py-3 text-center font-mono text-[10px] uppercase tracking-wider text-[var(--text-secondary)]"
                   >
                     {c}
                   </th>
@@ -591,7 +591,7 @@ export default function PolicyEnginePage() {
             </thead>
             <tbody>
               {ROLES.map((role) => (
-                <tr key={role} className="border-b border-[#1e2d47]/40">
+                <tr key={role} className="border-b border-[var(--border-color)]/40">
                   <td className="px-4 py-3">
                     <span
                       className={`text-xs font-medium px-2.5 py-1 rounded-full ${roleColor(role)}`}
@@ -623,7 +623,7 @@ export default function PolicyEnginePage() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-[10px] text-gray-600">—</span>
+                          <span className="text-[10px] text-[var(--text-secondary)]">—</span>
                         )}
                       </td>
                     );
@@ -632,7 +632,7 @@ export default function PolicyEnginePage() {
               ))}
             </tbody>
           </table>
-          <div className="px-4 py-2.5 border-t border-[#1e2d47] flex items-center gap-4 text-[10px] text-gray-500">
+          <div className="px-4 py-2.5 border-t border-[var(--border-color)] flex items-center gap-4 text-[10px] text-[var(--text-secondary)]">
             <span className="font-mono">Legend:</span>
             {OPERATIONS.map((op) => (
               <span key={op} className="flex items-center gap-1">
@@ -656,21 +656,21 @@ export default function PolicyEnginePage() {
       {activeTab === "simulate" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Input panel */}
-          <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-5 space-y-4">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 space-y-4">
             <div className="flex items-center gap-2 mb-1">
               <Play className="w-4 h-4 text-indigo-400" />
-              <h3 className="text-sm font-semibold text-gray-100">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 Policy Simulation
               </h3>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[var(--text-secondary)]">
               Test whether a role is authorized for a specific operation on a
               connector. The evaluation runs against real policy rules on the
               server.
             </p>
 
             <div>
-              <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+              <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                 Role
               </label>
               <select
@@ -686,7 +686,7 @@ export default function PolicyEnginePage() {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+              <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                 Connector
               </label>
               <select
@@ -702,7 +702,7 @@ export default function PolicyEnginePage() {
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-mono uppercase text-gray-500 mb-1 block">
+              <label className="text-[11px] font-mono uppercase text-[var(--text-secondary)] mb-1 block">
                 Operation
               </label>
               <select
@@ -735,9 +735,9 @@ export default function PolicyEnginePage() {
           </div>
 
           {/* Result panel */}
-          <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-5">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5">
             {!simResult && !simLoading && (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500 py-12">
+              <div className="flex flex-col items-center justify-center h-full text-[var(--text-secondary)] py-12">
                 <Info className="w-8 h-8 mb-3 opacity-40" />
                 <p className="text-sm">
                   Run a simulation to see the policy decision
@@ -761,7 +761,7 @@ export default function PolicyEnginePage() {
                     </div>
                   )}
                   {simResult.matchedRuleId && (
-                    <span className="text-xs font-mono text-gray-500">
+                    <span className="text-xs font-mono text-[var(--text-secondary)]">
                       Matched: {simResult.matchedRuleId}
                     </span>
                   )}
@@ -808,7 +808,7 @@ export default function PolicyEnginePage() {
 
                 {/* Reasoning trace */}
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-300 mb-2">
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)] mb-2">
                     Evaluation Trace
                   </h4>
                   <div className="space-y-1.5">
@@ -824,21 +824,21 @@ export default function PolicyEnginePage() {
                           key={r.step}
                           className="flex items-start gap-2 text-xs"
                         >
-                          <span className="text-[10px] font-mono text-gray-600 mt-0.5 w-4 shrink-0">
+                          <span className="text-[10px] font-mono text-[var(--text-secondary)] mt-0.5 w-4 shrink-0">
                             {r.step}.
                           </span>
                           <div>
-                            <span className="text-gray-400 font-medium">
+                            <span className="text-[var(--text-muted)] font-medium">
                               {r.check}
                             </span>
-                            <span className="text-gray-600 mx-1.5">—</span>
+                            <span className="text-[var(--text-secondary)] mx-1.5">—</span>
                             <span
                               className={
                                 isAllow
                                   ? "text-emerald-400"
                                   : isDeny
                                     ? "text-rose-400"
-                                    : "text-gray-300"
+                                    : "text-[var(--text-primary)]"
                               }
                             >
                               {r.result}

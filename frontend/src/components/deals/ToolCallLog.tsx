@@ -16,9 +16,9 @@ export function ToolCallLog({ events, streaming }: ToolCallLogProps) {
   if (events.length === 0 && !streaming) return null;
 
   return (
-    <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
-      <div className="px-3 py-2 border-b border-gray-700 flex items-center gap-2">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+    <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border-color)] overflow-hidden">
+      <div className="px-3 py-2 border-b border-[var(--border-color)] flex items-center gap-2">
+        <span className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
           Tool Calls
         </span>
         {streaming && (
@@ -32,12 +32,12 @@ export function ToolCallLog({ events, streaming }: ToolCallLogProps) {
             return (
               <div key={i} className="flex items-start gap-2">
                 <span className="text-blue-400 shrink-0">→</span>
-                <span className="text-gray-300">
+                <span className="text-[var(--text-primary)]">
                   <span className="text-blue-300 font-semibold">{data.tool}</span>
                   {data.connector && (
                     <span className="text-indigo-400 ml-1">[{data.connector}]</span>
                   )}
-                  <span className="text-gray-500">
+                  <span className="text-[var(--text-secondary)]">
                     ({JSON.stringify(data.input)})
                   </span>
                 </span>
@@ -48,7 +48,7 @@ export function ToolCallLog({ events, streaming }: ToolCallLogProps) {
           return (
             <div key={i} className="flex items-start gap-2">
               <span className="text-green-400 shrink-0">←</span>
-              <span className="text-gray-400 break-all">
+              <span className="text-[var(--text-muted)] break-all">
                 <span className="text-green-300 font-semibold">{data.tool}</span>
                 {data.connector && (
                   <span className="text-indigo-400 ml-1">[{data.connector}]</span>

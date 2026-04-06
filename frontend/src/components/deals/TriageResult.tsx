@@ -23,35 +23,35 @@ export function TriageResult({ result }: TriageResultProps) {
       <div className="flex items-center gap-4 flex-wrap">
         <span
           className={`px-4 py-1.5 rounded-full text-sm font-bold uppercase ${
-            recColors[result.recommendation] || "bg-gray-500 text-white"
+            recColors[result.recommendation] || "bg-[var(--bg-card-alt)]0 text-white"
           }`}
         >
           {result.recommendation}
         </span>
         {result.strategy && (
-          <span className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
+          <span className="px-2.5 py-1 rounded-full bg-[var(--bg-card-alt)] text-[var(--text-secondary)] text-xs font-medium">
             {result.strategy === "triage_workflow"
               ? "Triage Workflow"
               : result.strategy}
           </span>
         )}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Mandate Fit</span>
+          <span className="text-sm text-[var(--text-secondary)]">Mandate Fit</span>
           <div className="flex items-center gap-1">
-            <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-24 h-2 bg-[var(--bg-card-alt)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-gray-900 rounded-full transition-all"
+                className="h-full bg-indigo-600 rounded-full transition-all"
                 style={{ width: `${(result.mandate_fit_score / 10) * 100}%` }}
               />
             </div>
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-semibold text-[var(--text-primary)]">
               {result.mandate_fit_score}/10
             </span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Confidence</span>
-          <span className="text-sm font-semibold text-gray-900">
+          <span className="text-sm text-[var(--text-secondary)]">Confidence</span>
+          <span className="text-sm font-semibold text-[var(--text-primary)]">
             {Math.round(result.confidence * 100)}%
           </span>
         </div>
@@ -60,7 +60,7 @@ export function TriageResult({ result }: TriageResultProps) {
       {/* Connectors Used */}
       {result.connectors_used && result.connectors_used.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h4 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2">
             Connectors Used
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ export function TriageResult({ result }: TriageResultProps) {
       {/* Flags */}
       {result.flags.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h4 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2">
             Flags
           </h4>
           <div className="space-y-1.5">
@@ -87,7 +87,7 @@ export function TriageResult({ result }: TriageResultProps) {
               <div
                 key={i}
                 className={`flex items-start gap-2 px-3 py-2 rounded-md border text-sm ${
-                  severityColors[flag.severity] || "bg-gray-50 text-gray-700"
+                  severityColors[flag.severity] || "bg-[var(--bg-card-alt)] text-[var(--text-primary)]"
                 }`}
               >
                 <span className="font-semibold shrink-0 uppercase text-xs mt-0.5">
@@ -105,7 +105,7 @@ export function TriageResult({ result }: TriageResultProps) {
       {/* Recommended Actions */}
       {result.recommended_actions.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h4 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2">
             Recommended Actions
           </h4>
           <div className="space-y-1.5">
@@ -114,14 +114,14 @@ export function TriageResult({ result }: TriageResultProps) {
               .map((action, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 px-3 py-2 bg-gray-50 rounded-md text-sm"
+                  className="flex items-start gap-3 px-3 py-2 bg-[var(--bg-card-alt)] rounded-md text-sm"
                 >
-                  <span className="w-5 h-5 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center shrink-0 mt-0.5">
                     {action.priority}
                   </span>
                   <div className="flex-1">
-                    <span className="text-gray-900">{action.action}</span>
-                    <span className="text-gray-400 ml-2">— {action.owner}</span>
+                    <span className="text-[var(--text-primary)]">{action.action}</span>
+                    <span className="text-[var(--text-muted)] ml-2">— {action.owner}</span>
                   </div>
                 </div>
               ))}
@@ -131,10 +131,10 @@ export function TriageResult({ result }: TriageResultProps) {
 
       {/* Analyst Summary */}
       <div>
-        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+        <h4 className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2">
           Analyst Summary
         </h4>
-        <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap bg-gray-50 rounded-md p-4">
+        <div className="text-sm text-[var(--text-primary)] leading-relaxed whitespace-pre-wrap bg-[var(--bg-card-alt)] rounded-md p-4">
           {result.analyst_summary}
         </div>
       </div>

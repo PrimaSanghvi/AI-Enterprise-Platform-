@@ -10,15 +10,15 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
       <div
         className={`max-w-[75%] rounded-xl px-4 py-3 text-sm ${
           isUser
-            ? "bg-gray-900 text-white"
-            : "bg-white border border-gray-200 text-gray-800"
+            ? "bg-indigo-600 text-white"
+            : "bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)]"
         }`}
       >
         <div className="whitespace-pre-wrap leading-relaxed">{msg.content}</div>
 
         {msg.sources && msg.sources.length > 0 && (
-          <div className="mt-3 pt-2 border-t border-gray-100">
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+          <div className="mt-3 pt-2 border-t border-[var(--border-color)]">
+            <div className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1">
               Sources
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -42,7 +42,7 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
             {msg.toolsUsed.map((tool, i) => (
               <span
                 key={i}
-                className="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-mono"
+                className="inline-block px-1.5 py-0.5 bg-[var(--bg-card-alt)] text-[var(--text-secondary)] rounded text-[10px] font-mono"
               >
                 {tool}
               </span>
@@ -72,7 +72,7 @@ function StreamingIndicator({
   if (events.length === 0 && !intent) {
     return (
       <div className="flex justify-start">
-        <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-secondary)]">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             Thinking...
@@ -91,14 +91,14 @@ function StreamingIndicator({
 
   return (
     <div className="flex justify-start">
-      <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm">
         {/* Strategy label */}
         {intent && (
           <div className="mb-2 flex items-center gap-2">
             <span className="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-xs font-semibold uppercase">
               {intent.strategy}
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--text-muted)]">
               {STRATEGY_LABELS[intent.strategy] || intent.reasoning}
             </span>
           </div>
@@ -118,7 +118,7 @@ function StreamingIndicator({
         )}
         {events.length > 0 && (
           <>
-            <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <div className="flex items-center gap-2 text-[var(--text-secondary)] mb-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               Calling tools...
             </div>
@@ -152,7 +152,7 @@ function StreamingIndicator({
               })}
             </div>
             {toolName && (
-              <div className="mt-1 text-xs text-gray-400">
+              <div className="mt-1 text-xs text-[var(--text-muted)]">
                 {events.length} tool calls • Processing {toolName}
               </div>
             )}
@@ -209,7 +209,7 @@ export function ChatView({
     return (
       <div className="flex h-full">
         {/* Threads panel */}
-        <div className="w-56 bg-gray-900 border-r border-gray-800 shrink-0 overflow-y-auto">
+        <div className="w-56 bg-[var(--bg-sidebar)] border-r border-[var(--border-sidebar)] shrink-0 overflow-y-auto">
           <ChatThreadsSidebar
             threads={threads}
             activeThreadId={activeThreadId}
@@ -218,9 +218,9 @@ export function ChatView({
             onDeleteThread={onDeleteThread}
           />
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
+        <div className="flex-1 flex flex-col items-center justify-center text-[var(--text-muted)]">
           <div className="text-3xl mb-3">💬</div>
-          <p className="text-sm font-medium text-gray-500">
+          <p className="text-sm font-medium text-[var(--text-secondary)]">
             Select a thread or start a new chat
           </p>
         </div>
@@ -231,7 +231,7 @@ export function ChatView({
   return (
     <div className="flex h-full">
       {/* Threads panel */}
-      <div className="w-56 bg-gray-900 border-r border-gray-800 shrink-0 overflow-y-auto">
+      <div className="w-56 bg-[var(--bg-sidebar)] border-r border-[var(--border-sidebar)] shrink-0 overflow-y-auto">
         <ChatThreadsSidebar
           threads={threads}
           activeThreadId={activeThreadId}
@@ -243,8 +243,8 @@ export function ChatView({
 
       {/* Chat area */}
       <div className="flex-1 flex flex-col">
-        <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between shrink-0">
-          <h1 className="text-sm font-semibold text-gray-900">
+        <div className="px-6 py-3 border-b border-[var(--border-color)] flex items-center justify-between shrink-0">
+          <h1 className="text-sm font-semibold text-[var(--text-primary)]">
             AI Analyst Chat
           </h1>
         </div>
@@ -253,17 +253,17 @@ export function ChatView({
         {messages.length === 0 && !isStreaming && (
           <div className="flex flex-col items-center justify-center h-full">
             <div className="text-3xl mb-3">💬</div>
-            <p className="text-sm font-medium text-gray-500 mb-1">
+            <p className="text-sm font-medium text-[var(--text-secondary)] mb-1">
               Ask about any deal in the pipeline
             </p>
-            <p className="text-xs text-gray-400 mb-6">
+            <p className="text-xs text-[var(--text-muted)] mb-6">
               Click a suggestion or type your own question
             </p>
 
             <div className="max-w-lg w-full space-y-4">
               {/* Deal Lookup */}
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Deal Lookup</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] mb-2 block">Deal Lookup</span>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "Tell me about Helix Genomics",
@@ -273,7 +273,7 @@ export function ChatView({
                     <button
                       key={q}
                       onClick={() => sendMessage(q)}
-                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                      className="px-3 py-1.5 rounded-full border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
                     >
                       {q}
                     </button>
@@ -283,7 +283,7 @@ export function ChatView({
 
               {/* Comparison & Analysis */}
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Comparison & Analysis</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] mb-2 block">Comparison & Analysis</span>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "Compare the Healthcare sector deals",
@@ -293,7 +293,7 @@ export function ChatView({
                     <button
                       key={q}
                       onClick={() => sendMessage(q)}
-                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                      className="px-3 py-1.5 rounded-full border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
                     >
                       {q}
                     </button>
@@ -303,7 +303,7 @@ export function ChatView({
 
               {/* Relationships & Context */}
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 block">Relationships & Context</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] mb-2 block">Relationships & Context</span>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "Show investor relationships for Helix Genomics",
@@ -312,7 +312,7 @@ export function ChatView({
                     <button
                       key={q}
                       onClick={() => sendMessage(q)}
-                      className="px-3 py-1.5 rounded-full border border-gray-300 text-xs text-gray-500 hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+                      className="px-3 py-1.5 rounded-full border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
                     >
                       {q}
                     </button>
@@ -344,7 +344,7 @@ export function ChatView({
 
       <form
         onSubmit={handleSubmit}
-        className="px-6 py-4 border-t border-gray-200 shrink-0"
+        className="px-6 py-4 border-t border-[var(--border-color)] shrink-0"
       >
         <div className="flex gap-2">
           <input
@@ -353,12 +353,12 @@ export function ChatView({
             onChange={(e) => setInput(e.target.value)}
             disabled={isStreaming}
             placeholder="Ask about a deal..."
-            className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
+            className="flex-1 px-4 py-2.5 border border-[var(--border-color)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-[var(--bg-card-alt)] disabled:text-[var(--text-muted)]"
           />
           <button
             type="submit"
             disabled={isStreaming || !input.trim()}
-            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Send
           </button>

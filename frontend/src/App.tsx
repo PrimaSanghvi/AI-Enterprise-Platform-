@@ -48,7 +48,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-[var(--bg-page)] transition-colors duration-200">
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}
@@ -61,7 +61,7 @@ function App() {
           <>
             <div className="flex-1 overflow-y-auto">
               <div className="p-6">
-                <h1 className="text-xl font-semibold text-gray-900 mb-4">
+                <h1 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
                   Deal Pipeline
                 </h1>
                 <DealTable

@@ -11,8 +11,8 @@ interface NavbarProps {
 
 export function Navbar({ activePage }: NavbarProps) {
   return (
-    <header className="bg-white border-b border-gray-200 px-6 h-12 flex items-center shrink-0">
-      <h1 className="text-sm font-semibold text-gray-900">
+    <header className="bg-[var(--bg-card)] border-b border-[var(--border-color)] px-6 h-12 flex items-center shrink-0">
+      <h1 className="text-sm font-semibold text-[var(--text-primary)]">
         {pageTitles[activePage] || ""}
       </h1>
     </header>

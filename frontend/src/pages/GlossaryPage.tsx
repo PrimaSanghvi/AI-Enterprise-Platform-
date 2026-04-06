@@ -223,16 +223,16 @@ export default function GlossaryPage() {
   }, [activeCategory, searchQuery]);
 
   return (
-    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[#050911]">
+    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[var(--bg-page)]">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-indigo-400" />
-          <h1 className="text-2xl font-bold text-gray-100">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             Glossary & Reference
           </h1>
         </div>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-[var(--text-secondary)] mt-1">
           Platform terminology across finance, AI/ML, enterprise systems, and
           security operations
         </p>
@@ -240,7 +240,7 @@ export default function GlossaryPage() {
 
       {/* Category tabs + Search */}
       <div className="flex flex-wrap gap-3 items-center">
-        <div className="flex gap-1 bg-[#0c1220] border border-[#1e2d47] rounded-xl p-1">
+        <div className="flex gap-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-1">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
@@ -248,7 +248,7 @@ export default function GlossaryPage() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeCategory === cat.id
                   ? "bg-indigo-600/20 text-indigo-400"
-                  : "text-gray-400 hover:text-white hover:bg-[#1e2d47]/50"
+                  : "text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-hover)]"
               }`}
             >
               <cat.icon className="w-3.5 h-3.5" />
@@ -257,12 +257,12 @@ export default function GlossaryPage() {
           ))}
         </div>
         <div className="flex-1 min-w-[200px] relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-3.5 h-3.5" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] w-3.5 h-3.5" />
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search terms, definitions, context…"
-            className="w-full bg-[#0c1220] border border-[#1e2d47] text-gray-300 text-xs rounded-lg pl-9 pr-3 py-2 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)] text-xs rounded-lg pl-9 pr-3 py-2 focus:outline-none focus:border-indigo-500"
           />
         </div>
       </div>
@@ -273,11 +273,11 @@ export default function GlossaryPage() {
           {filtered.map((t) => (
             <div
               key={t.term}
-              className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 flex flex-col"
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex flex-col"
             >
               {/* Title + badge */}
               <div className="flex items-start gap-2 mb-2">
-                <h3 className="text-sm font-semibold text-gray-100 flex-1">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] flex-1">
                   {t.term}
                 </h3>
                 <span
@@ -288,16 +288,16 @@ export default function GlossaryPage() {
               </div>
 
               {/* Definition */}
-              <p className="text-xs text-gray-400 leading-relaxed mb-3">
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-3">
                 {t.definition}
               </p>
 
               {/* Formula */}
               {t.formula && (
-                <div className="bg-[#050911] border border-[#1e2d47] rounded-lg px-3 py-2 mb-3">
+                <div className="bg-[var(--bg-page)] border border-[var(--border-color)] rounded-lg px-3 py-2 mb-3">
                   <div className="flex items-center gap-1.5 mb-1">
                     <Calculator className="w-3 h-3 text-emerald-400" />
-                    <span className="text-[10px] font-mono uppercase text-gray-500">
+                    <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)]">
                       Formula
                     </span>
                   </div>
@@ -309,11 +309,11 @@ export default function GlossaryPage() {
 
               {/* Context */}
               {t.context && (
-                <div className="border-t border-[#1e2d47] pt-2 mt-auto">
-                  <span className="text-[10px] font-mono uppercase text-gray-500">
+                <div className="border-t border-[var(--border-color)] pt-2 mt-auto">
+                  <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)]">
                     Platform Context
                   </span>
-                  <p className="text-[11px] text-gray-500 leading-relaxed mt-1">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed mt-1">
                     {t.context}
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export default function GlossaryPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <div className="flex flex-col items-center justify-center py-16 text-[var(--text-secondary)]">
           <BookOpen className="w-8 h-8 mb-3 opacity-40" />
           <p className="text-sm mb-2">No terminology matched your search.</p>
           <button

@@ -12,14 +12,14 @@ export function TriagePanel({ state, dealId, onClose }: TriagePanelProps) {
   if (state.status === "idle") return null;
 
   return (
-    <div className="border-t border-gray-200 bg-white">
-      <div className="px-6 py-3 border-b border-gray-100 flex items-center justify-between">
+    <div className="border-t border-[var(--border-color)] bg-[var(--bg-card)]">
+      <div className="px-6 py-3 border-b border-[var(--border-color)] flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h3 className="text-sm font-semibold text-gray-900">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">
             Triage: {dealId}
           </h3>
           {state.status === "streaming" && (
-            <span className="text-xs text-gray-500 flex items-center gap-1.5">
+            <span className="text-xs text-[var(--text-secondary)] flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               Analyzing...
             </span>
@@ -33,7 +33,7 @@ export function TriagePanel({ state, dealId, onClose }: TriagePanelProps) {
         </div>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+          className="text-[var(--text-muted)] hover:text-gray-600 text-lg leading-none"
         >
           ×
         </button>

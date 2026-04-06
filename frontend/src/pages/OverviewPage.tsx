@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 import {
   LayoutDashboard,
   DollarSign,
@@ -85,37 +86,46 @@ const CONNECTORS = [
 /* ── Chart options ── */
 const chartFont = { family: "ui-monospace, monospace", size: 10 };
 
-const barOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: { titleFont: chartFont, bodyFont: chartFont },
-  },
-  scales: {
-    x: {
-      ticks: { color: "#6b7280", font: chartFont },
-      grid: { color: "#1e2d47" },
-    },
-    y: {
-      ticks: { color: "#6b7280", font: chartFont },
-      grid: { color: "#1e2d47" },
-      beginAtZero: true,
-    },
-  },
-} as const;
+function getChartOptions() {
+  const style = getComputedStyle(document.documentElement);
+  const gridColor = style.getPropertyValue("--chart-grid").trim();
+  const textColor = style.getPropertyValue("--chart-text").trim();
+  const legendColor = style.getPropertyValue("--chart-legend").trim();
 
-const doughnutOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: "bottom" as const,
-      labels: { color: "#9ca3af", font: chartFont, padding: 12 },
+  const barOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { titleFont: chartFont, bodyFont: chartFont },
     },
-    tooltip: { titleFont: chartFont, bodyFont: chartFont },
-  },
-} as const;
+    scales: {
+      x: {
+        ticks: { color: textColor, font: chartFont },
+        grid: { color: gridColor },
+      },
+      y: {
+        ticks: { color: textColor, font: chartFont },
+        grid: { color: gridColor },
+        beginAtZero: true,
+      },
+    },
+  } as const;
+
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+        labels: { color: legendColor, font: chartFont, padding: 12 },
+      },
+      tooltip: { titleFont: chartFont, bodyFont: chartFont },
+    },
+  } as const;
+
+  return { barOptions, doughnutOptions };
+}
 
 const STATUS_COLORS: Record<string, string> = {
   screening: "#6366f1",
@@ -135,6 +145,7 @@ interface OverviewPageProps {
 }
 
 export default function OverviewPage({ onNavigate }: OverviewPageProps) {
+  const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [deals, setDeals] = useState<Deal[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
@@ -193,6 +204,9 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
     const denies = auditLogs.filter((l) => l.decision === "Deny").length;
     return ((denies / auditLogs.length) * 100).toFixed(1);
   }, [auditLogs]);
+
+  /* ── Chart options (theme-aware) ── */
+  const { barOptions, doughnutOptions } = useMemo(() => getChartOptions(), [theme]);
 
   /* ── Charts ── */
   const sectorData = useMemo(() => {
@@ -294,8 +308,8 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
   /* ── Loading ── */
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#050911]">
-        <div className="text-gray-500 text-sm">Loading dashboard…</div>
+      <div className="flex-1 flex items-center justify-center bg-[var(--bg-page)]">
+        <div className="text-[var(--text-secondary)] text-sm">Loading dashboard…</div>
       </div>
     );
   }
@@ -304,14 +318,14 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
      Render
      ══════════════════════════════════════════════════════════════════════ */
   return (
-    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[#050911]">
+    <div className="p-6 space-y-5 h-full overflow-y-auto bg-[var(--bg-page)]">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2">
           <LayoutDashboard className="w-5 h-5 text-indigo-400" />
-          <h1 className="text-2xl font-bold text-gray-100">Overview</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Overview</h1>
         </div>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-[var(--text-secondary)] mt-1">
           Real-time platform metrics across deal pipeline, AI systems, and
           governance
         </p>
@@ -351,16 +365,16 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
         ].map((kpi) => (
           <div
             key={kpi.label}
-            className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4"
+            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4"
           >
             <div className="flex items-center gap-2 mb-2">
               <kpi.icon className={`w-3.5 h-3.5 ${kpi.color}`} />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)]">
                 {kpi.label}
               </span>
             </div>
-            <div className="text-xl font-bold text-gray-100">{kpi.value}</div>
-            <span className="text-xs font-mono text-gray-500">{kpi.sub}</span>
+            <div className="text-xl font-bold text-[var(--text-primary)]">{kpi.value}</div>
+            <span className="text-xs font-mono text-[var(--text-secondary)]">{kpi.sub}</span>
           </div>
         ))}
       </div>
@@ -368,8 +382,8 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Bar: Deals by Sector */}
-        <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 flex flex-col">
-          <h3 className="text-sm font-bold text-gray-100 mb-4">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex flex-col">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-4">
             Deals by Sector
           </h3>
           <div className="flex-1 relative min-h-[200px]">
@@ -378,8 +392,8 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
         </div>
 
         {/* Doughnut: Pipeline Status */}
-        <div className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 flex flex-col">
-          <h3 className="text-sm font-bold text-gray-100 mb-4">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 flex flex-col">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-4">
             Pipeline by Status
           </h3>
           <div className="flex-1 relative min-h-[200px] flex items-center justify-center">
@@ -392,7 +406,7 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
 
       {/* Navigation cards */}
       <div>
-        <h3 className="text-sm font-bold text-gray-100 mb-3">
+        <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">
           Platform Modules
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -400,20 +414,20 @@ export default function OverviewPage({ onNavigate }: OverviewPageProps) {
             <button
               key={card.id}
               onClick={() => onNavigate(card.id)}
-              className="bg-[#0c1220] border border-[#1e2d47] rounded-2xl p-4 text-left hover:border-indigo-500/40 transition-colors group"
+              className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-4 text-left hover:border-indigo-500/40 transition-colors group"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <card.icon className={`w-4 h-4 ${card.color}`} />
-                  <span className="text-sm font-semibold text-gray-100">
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">
                     {card.title}
                   </span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-gray-600 group-hover:text-indigo-400 transition-colors" />
+                <ArrowRight className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-indigo-400 transition-colors" />
               </div>
               <div className="space-y-0.5">
                 {card.metrics.map((m, i) => (
-                  <div key={i} className="text-xs font-mono text-gray-500">
+                  <div key={i} className="text-xs font-mono text-[var(--text-secondary)]">
                     {m}
                   </div>
                 ))}
