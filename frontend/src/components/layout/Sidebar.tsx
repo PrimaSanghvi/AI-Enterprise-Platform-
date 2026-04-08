@@ -40,10 +40,10 @@ export function Sidebar({
         <img src={tenant.logo} alt={tenant.name} className="h-8 w-8 shrink-0 object-contain" />
         {!collapsed && (
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-[var(--sidebar-brand)] tracking-tight leading-none">
+            <span className="text-base font-bold text-[var(--sidebar-brand)] tracking-tight leading-none">
               {tenant.name}
             </span>
-            <span className="text-[9px] text-[var(--sidebar-brand-sub)] font-semibold tracking-wider mt-0.5">
+            <span className="text-[10px] text-[var(--sidebar-brand-sub)] font-semibold tracking-wider mt-1">
               {tenant.subtitle}
             </span>
           </div>

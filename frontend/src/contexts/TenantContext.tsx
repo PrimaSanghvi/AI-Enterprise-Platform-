@@ -37,6 +37,11 @@ const DEFAULT_TENANT = TENANTS[0]; // cogniify
 function resolveTenant(): TenantConfig {
   const hostname = window.location.hostname;
 
+  // persistent subdomain must be checked before cogniify (since both contain cogniify.ai)
+  if (hostname.includes("persistent")) {
+    return TENANTS.find((t) => t.id === "persistent")!;
+  }
+
   for (const tenant of TENANTS) {
     if (hostname.includes(tenant.id)) {
       return tenant;
