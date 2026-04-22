@@ -3,6 +3,30 @@ import type { ChatMessage, ChatThread, IntentClassifiedEvent, ChatStreamState } 
 import type { StreamEvent, ToolCallEvent, ToolResultEvent } from "../../types/triage";
 import { ChatThreadsSidebar } from "./ChatThreadsSidebar";
 
+function SuggestionPills({
+  suggestions,
+  onSelect,
+}: {
+  suggestions: string[];
+  onSelect: (q: string) => void;
+}) {
+  return (
+    <div className="flex justify-start">
+      <div className="max-w-[75%] flex flex-wrap gap-2">
+        {suggestions.map((q) => (
+          <button
+            key={q}
+            onClick={() => onSelect(q)}
+            className="px-3 py-1.5 rounded-full border border-[var(--border-color)] text-xs text-[var(--text-secondary)] hover:text-indigo-600 hover:border-indigo-400 hover:bg-indigo-50 transition-all active:scale-95"
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MessageBubble({ msg }: { msg: ChatMessage }) {
   const isUser = msg.role === "user";
   return (
@@ -323,9 +347,26 @@ export function ChatView({
           </div>
         )}
 
-        {messages.map((msg, i) => (
-          <MessageBubble key={i} msg={msg} />
-        ))}
+        {messages.map((msg, i) => {
+          const isLast = i === messages.length - 1;
+          const showSuggestions =
+            isLast &&
+            msg.role === "assistant" &&
+            !isStreaming &&
+            !!msg.suggestions &&
+            msg.suggestions.length > 0;
+          return (
+            <div key={i} className="space-y-4">
+              <MessageBubble msg={msg} />
+              {showSuggestions && (
+                <SuggestionPills
+                  suggestions={msg.suggestions!}
+                  onSelect={sendMessage}
+                />
+              )}
+            </div>
+          );
+        })}
 
         {isStreaming && (
           <StreamingIndicator events={stream.events} intent={stream.intent} />

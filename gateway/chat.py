@@ -63,8 +63,18 @@ When you have gathered enough context, provide your final answer wrapped in \
 {{
   "answer": "<your conversational answer with inline citations>",
   "tools_used": ["<tool_name_1>", "<tool_name_2>"],
-  "sources": [{{"title": "<descriptive title>", "deal_id": "<deal_id or empty string>"}}]
+  "sources": [{{"title": "<descriptive title>", "deal_id": "<deal_id or empty string>"}}],
+  "suggested_followups": ["<question 1>", "<question 2>", "<question 3>"]
 }}
+
+FOLLOW-UP SUGGESTIONS:
+- Always include exactly 3 suggested_followups — short natural-language questions (under 10 words each)
+  that the user might plausibly ask next, continuing from your current answer.
+- Each suggestion MUST be answerable from the available tools (deal pipeline, company/graph data,
+  portfolio analytics, documents, files). Do not suggest out-of-scope questions.
+- Suggestions should explore a different angle than the answer just given (e.g. related deals,
+  investor relationships, documents, portfolio overlap, triage history) — not rephrase the same question.
+- If the current answer was out-of-scope, suggest in-scope alternatives instead.
 
 FORMATTING RULES:
 - Write your answer as plain conversational text. Do NOT use markdown syntax.

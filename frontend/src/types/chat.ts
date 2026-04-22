@@ -5,6 +5,7 @@ export interface ChatMessage {
   content: string;
   sources?: ChatSource[];
   toolsUsed?: string[];
+  suggestions?: string[];
 }
 
 export interface ChatSource {
@@ -18,6 +19,7 @@ export interface ChatResponseData {
   sources: ChatSource[];
   strategy?: string;
   connectors?: string[];
+  suggested_followups?: string[];
 }
 
 export interface IntentClassifiedEvent {

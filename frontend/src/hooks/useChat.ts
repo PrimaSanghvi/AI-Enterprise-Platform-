@@ -94,6 +94,7 @@ function reducer(state: ChatState, action: Action): ChatState {
             content: action.data.answer,
             sources: action.data.sources,
             toolsUsed: action.data.tools_used,
+            suggestions: action.data.suggested_followups,
           },
         ],
         stream: { ...state.stream, status: "done", response: action.data },
@@ -188,6 +189,7 @@ export function useChat({ activeThread, onUpdateThread }: UseChatOptions) {
                     content: respData.answer,
                     sources: respData.sources,
                     toolsUsed: respData.tools_used,
+                    suggestions: respData.suggested_followups,
                   },
                 ];
                 onUpdateThread?.(activeThread.id, updatedMessages);

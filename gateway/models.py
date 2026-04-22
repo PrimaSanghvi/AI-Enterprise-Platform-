@@ -28,6 +28,7 @@ class ChatResponse(BaseModel):
     sources: list[ChatSource]
     strategy: str = ""
     connectors: list[str] = []
+    suggested_followups: list[str] = []
 
 
 class TriageOutput(BaseModel):

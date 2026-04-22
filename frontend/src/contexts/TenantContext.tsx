@@ -24,6 +24,13 @@ const TENANTS: TenantConfig[] = [
     pageTitle: "Persistent — AI Enterprise Platform",
   },
   {
+    id: "ama",
+    name: "AMA GLOBAL",
+    subtitle: "AI ENTERPRISE PLATFORM",
+    logo: "/ama_logo.png",
+    pageTitle: "AMA Global — AI Enterprise Platform",
+  },
+  {
     id: "rialto",
     name: "RIALTO",
     subtitle: "AI ENTERPRISE PLATFORM",
@@ -37,9 +44,12 @@ const DEFAULT_TENANT = TENANTS[0]; // cogniify
 function resolveTenant(): TenantConfig {
   const hostname = window.location.hostname;
 
-  // persistent subdomain must be checked before cogniify (since both contain cogniify.ai)
+  // persistent/ama subdomains must be checked before cogniify (since they contain cogniify.ai)
   if (hostname.includes("persistent")) {
     return TENANTS.find((t) => t.id === "persistent")!;
+  }
+  if (hostname.includes("ama")) {
+    return TENANTS.find((t) => t.id === "ama")!;
   }
 
   for (const tenant of TENANTS) {
