@@ -37,10 +37,24 @@ export function Sidebar({
     >
       {/* Branding */}
       <div className="flex items-center gap-3 px-4 h-14 border-b border-[var(--border-sidebar)] shrink-0">
-        <img src={tenant.logo} alt={tenant.name} className="h-8 w-8 shrink-0 object-contain" />
+        {tenant.logo ? (
+          <img src={tenant.logo} alt={tenant.name} className="h-8 w-8 shrink-0 object-contain" />
+        ) : collapsed ? (
+          <span
+            className="text-base font-bold tracking-tight leading-none shrink-0"
+            style={tenant.brandColor ? { color: tenant.brandColor } : undefined}
+          >
+            {tenant.name.split(" ")[0]}
+          </span>
+        ) : null}
         {!collapsed && (
           <div className="flex flex-col">
-            <span className="text-base font-bold text-[var(--sidebar-brand)] tracking-tight leading-none">
+            <span
+              className={`text-base font-bold tracking-tight leading-none ${
+                tenant.brandColor ? "" : "text-[var(--sidebar-brand)]"
+              }`}
+              style={tenant.brandColor ? { color: tenant.brandColor } : undefined}
+            >
               {tenant.name}
             </span>
             <span className="text-[10px] text-[var(--sidebar-brand-sub)] font-semibold tracking-wider mt-1">

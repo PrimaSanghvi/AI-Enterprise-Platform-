@@ -6,6 +6,7 @@ interface TenantConfig {
   subtitle: string;
   logo: string;
   pageTitle: string;
+  brandColor?: string;
 }
 
 const TENANTS: TenantConfig[] = [
@@ -27,8 +28,9 @@ const TENANTS: TenantConfig[] = [
     id: "ama",
     name: "AMA GLOBAL",
     subtitle: "AI ENTERPRISE PLATFORM",
-    logo: "/ama_logo.png",
+    logo: "",
     pageTitle: "AMA Global — AI Enterprise Platform",
+    brandColor: "#00AEEF",
   },
   {
     id: "rialto",
