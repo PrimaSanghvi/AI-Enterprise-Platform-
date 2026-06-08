@@ -126,61 +126,8 @@ async def chat(body: ChatRequest, request: Request):
 @app.get("/graph/data")
 async def graph_data():
     """Return relationship graph data as nodes + edges for visualization."""
-    import json as _json
-    from pathlib import Path
-
-    fixtures = Path(__file__).resolve().parent.parent / "backend" / "fixtures"
-
-    with open(fixtures / "relationships.json") as f:
-        relationships = _json.load(f)
-
-    with open(fixtures / "deals.json") as f:
-        deals = _json.load(f)
-
-    # Build company → deal mapping
-    company_deals = {}
-    for deal in deals:
-        company_deals[deal["company_id"]] = deal
-
-    nodes = []
-    edges = []
-    seen_nodes = set()
-
-    for company_id, data in relationships.items():
-        company_name = data["company_name"]
-        deal = company_deals.get(company_id, {})
-
-        # Company node
-        if company_id not in seen_nodes:
-            nodes.append({
-                "id": company_id,
-                "label": company_name,
-                "type": "company",
-                "sector": deal.get("sector", ""),
-                "deal_id": deal.get("deal_id", ""),
-            })
-            seen_nodes.add(company_id)
-
-        # Relationship nodes + edges
-        for rel in data.get("relationships", []):
-            entity_id = rel["entity_id"]
-            if entity_id not in seen_nodes:
-                nodes.append({
-                    "id": entity_id,
-                    "label": rel["name"],
-                    "type": rel["type"],
-                    "details": rel.get("details", ""),
-                })
-                seen_nodes.add(entity_id)
-
-            edges.append({
-                "source": company_id,
-                "target": entity_id,
-                "relationship": rel["type"],
-                "details": rel.get("details", ""),
-            })
-
-    return {"nodes": nodes, "edges": edges}
+    from backend.connectors.graph import get_full_graph
+    return get_full_graph()
 
 
 @app.get("/audit/logs")
