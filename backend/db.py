@@ -5,7 +5,7 @@ from decimal import Decimal
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-SCHEMA = "ai_platform_db"
+SCHEMA = os.environ.get("DB_SCHEMA", "ai_platform_db")
 
 
 def get_conn():
