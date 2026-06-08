@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from contextlib import asynccontextmanager
 
@@ -17,42 +18,62 @@ from gateway.mcp_client import MCPClient
 from backend.mcp_server.server import mcp as mcp_server
 
 
+async def _warmup_mcp(app: FastAPI) -> None:
+    """Connect the MCP client in the background after the HTTP server is ready.
+
+    Runs concurrently with the server so the first real browser request finds
+    MCP already connected instead of paying the full connection cost.
+    """
+    await asyncio.sleep(1)  # give uvicorn a moment to finish binding
+    for attempt in range(1, 4):
+        try:
+            async with app.state.mcp_lock:
+                if not app.state.mcp_connected:
+                    await app.state.mcp.connect()
+                    app.state.mcp_connected = True
+            return
+        except Exception:
+            await asyncio.sleep(attempt)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Start / stop the persistent MCP client session.
-
-    The MCP backend is mounted in-process at /mcp.  The client connects
-    to it via localhost on the first request, avoiding any cross-service
-    networking issues on Render.
-    """
     async with mcp_server.session_manager.run():
         mcp_client = MCPClient(f"http://localhost:{GATEWAY_PORT}/mcp")
         app.state.mcp = mcp_client
         app.state.mcp_connected = False
+        app.state.mcp_lock = asyncio.Lock()
+
+        # Proactively connect MCP so it is ready before the first browser request
+        asyncio.create_task(_warmup_mcp(app))
+
         yield
         await mcp_client.disconnect()
 
 
 async def ensure_mcp_connected(request: Request):
-    """Lazily connect to MCP backend on first request."""
-    import asyncio
+    """Ensure MCP is connected before calling a tool.
 
+    Uses a lock so concurrent requests never race to call connect() at the
+    same time — only one attempt runs, others wait and reuse the result.
+    """
     if request.app.state.mcp_connected:
         return
-    mcp_client: MCPClient = request.app.state.mcp
-    retries = 5
-    for attempt in range(1, retries + 1):
-        try:
-            await mcp_client.connect()
-            request.app.state.mcp_connected = True
+    async with request.app.state.mcp_lock:
+        if request.app.state.mcp_connected:  # re-check after acquiring lock
             return
-        except Exception as exc:
-            if attempt == retries:
-                raise RuntimeError(
-                    f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
-                    f"Is the backend running? Error: {exc}"
-                ) from exc
-            await asyncio.sleep(3 * attempt)  # progressive backoff
+        for attempt in range(1, 4):
+            try:
+                await request.app.state.mcp.connect()
+                request.app.state.mcp_connected = True
+                return
+            except Exception as exc:
+                if attempt == 3:
+                    raise RuntimeError(
+                        f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
+                        f"Is the backend running? Error: {exc}"
+                    ) from exc
+                await asyncio.sleep(0.5 * attempt)
 
 
 app = FastAPI(title="Rialto AI Gateway", lifespan=lifespan)
