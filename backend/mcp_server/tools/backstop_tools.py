@@ -43,3 +43,51 @@ def register_tools(mcp: FastMCP):
         if not result:
             return json.dumps({"error": f"Deal {deal_id} not found"})
         return json.dumps(result)
+
+    @mcp.tool(name="backstop.create_company_stub")
+    def create_company_stub(
+        name: str,
+        sector: str,
+        stage: str,
+        company_id: str | None = None,
+    ) -> str:
+        """Create a minimal company record. Used when a new deal references a company not yet in the CRM."""
+        try:
+            company = backstop.create_company_stub(name=name, sector=sector, stage=stage, company_id=company_id)
+            return json.dumps(company)
+        except Exception as exc:
+            return json.dumps({"error": str(exc)})
+
+    @mcp.tool(name="backstop.create_deal")
+    def create_deal(
+        company_name: str,
+        sector: str,
+        stage: str,
+        status: str,
+        ask_amount: int,
+        valuation: int,
+        company_id: str | None = None,
+        deal_id: str | None = None,
+        source: str | None = None,
+        lead_partner: str | None = None,
+        date_received: str | None = None,
+    ) -> str:
+        """Create a new deal in the pipeline. Required: company_name, sector, stage, status, ask_amount, valuation. Returns the persisted deal JSON."""
+        payload = {
+            "company_name": company_name,
+            "sector": sector,
+            "stage": stage,
+            "status": status,
+            "ask_amount": ask_amount,
+            "valuation": valuation,
+            "company_id": company_id,
+            "deal_id": deal_id,
+            "source": source,
+            "lead_partner": lead_partner,
+            "date_received": date_received,
+        }
+        try:
+            deal = backstop.create_deal(payload)
+            return json.dumps(deal)
+        except ValueError as exc:
+            return json.dumps({"error": str(exc)})
