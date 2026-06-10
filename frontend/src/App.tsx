@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Sidebar } from "./components/layout/Sidebar";
 import { DealTable } from "./components/deals/DealTable";
 import { TriagePanel } from "./components/deals/TriagePanel";
+import { NewDealPanel } from "./components/deals/NewDealPanel";
 import { ChatView } from "./components/chat/ChatView";
 import RAGPipelinePage from "./pages/RAGPipelinePage";
 import GraphExplorerPage from "./pages/GraphExplorerPage";
@@ -19,6 +20,7 @@ type ActivePage = "overview" | "deals" | "chat" | "rag" | "graph" | "audit" | "p
 function App() {
   const [activePage, setActivePage] = useState<ActivePage>("overview");
   const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
+  const [showNewDeal, setShowNewDeal] = useState(false);
   const { deals, loading, error, refetch } = useDeals();
   const { state: triageState, startTriage, reset } = useTriageStream();
   const {
@@ -61,9 +63,17 @@ function App() {
           <>
             <div className="flex-1 overflow-y-auto">
               <div className="p-6">
-                <h1 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
-                  Deal Pipeline
-                </h1>
+                <div className="flex items-center justify-between mb-4">
+                  <h1 className="text-xl font-semibold text-[var(--text-primary)]">
+                    Deal Pipeline
+                  </h1>
+                  <button
+                    onClick={() => setShowNewDeal(true)}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+                  >
+                    + New Deal
+                  </button>
+                </div>
                 <DealTable
                   deals={deals}
                   loading={loading}
@@ -82,6 +92,16 @@ function App() {
                 state={triageState}
                 dealId={selectedDealId}
                 onClose={handleClosePanel}
+              />
+            )}
+            {showNewDeal && (
+              <NewDealPanel
+                onClose={() => setShowNewDeal(false)}
+                onTriage={(id) => {
+                  setShowNewDeal(false);
+                  refetch();
+                  handleRunTriage(id);
+                }}
               />
             )}
           </>

@@ -78,5 +78,16 @@
     "hq": "Boston, MA",
     "founded": 2022,
     "website": "https://aerocarbon.example.com"
+  },
+  {
+    "company_id": "CO-009",
+    "name": "XYZ",
+    "sector": "Climate",
+    "stage": "Series C",
+    "description": "(user-added stub)",
+    "hq": "",
+    "founded": null,
+    "website": "",
+    "source_meta": "user-added"
   }
 ]
