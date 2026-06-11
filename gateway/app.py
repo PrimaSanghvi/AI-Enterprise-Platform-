@@ -1,18 +1,23 @@
 from __future__ import annotations
 
+import csv
+import io
 import json
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
+from fastapi import FastAPI, File, Request, UploadFile
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from gateway.agent import run_triage
 from gateway.chat import run_chat
 from gateway.config import GATEWAY_PORT, MCP_SERVER_URL, ALLOWED_ORIGINS
+from gateway.deal_intake_agent import run_deal_intake
 from gateway.mcp_client import MCPClient
+from gateway.models import ChatDealRequest, NewDealInput
 
 from backend.mcp_server.server import mcp as mcp_server
 
@@ -84,6 +89,97 @@ async def list_deals(request: Request):
         triage = deal.get("triage_results")
         deal["triage_status"] = triage[-1]["decision"] if triage else "pending"
     return deals
+
+
+async def _create_deal_via_mcp(request: Request, payload: dict) -> dict:
+    """Validate via NewDealInput and create the deal through the MCP backstop.create_deal tool."""
+    await ensure_mcp_connected(request)
+    mcp_client: MCPClient = request.app.state.mcp
+    args = {k: v for k, v in payload.items() if v is not None}
+    raw = await mcp_client.call_tool("backstop.create_deal", args)
+    return json.loads(raw)
+
+
+@app.post("/deals")
+async def create_deal(body: NewDealInput, request: Request):
+    """Create a new deal from a manual form submission."""
+    result = await _create_deal_via_mcp(request, body.model_dump())
+    if "error" in result:
+        status = 409 if "already exists" in result["error"] else 400
+        return JSONResponse(status_code=status, content=result)
+    return result
+
+
+@app.post("/deals/upload")
+async def upload_deal(request: Request, file: UploadFile = File(...)):
+    """Create a single deal from an uploaded .json or .csv file. Multi-row CSVs use row 0 + warning."""
+    raw_bytes = await file.read()
+    filename = (file.filename or "").lower()
+    warnings: list[str] = []
+
+    try:
+        if filename.endswith(".json"):
+            data = json.loads(raw_bytes.decode("utf-8"))
+            if isinstance(data, list):
+                if not data:
+                    return JSONResponse(status_code=400, content={"error": "JSON array is empty"})
+                if len(data) > 1:
+                    warnings.append(f"File contained {len(data)} records; only the first was created.")
+                row = data[0]
+            else:
+                row = data
+        elif filename.endswith(".csv"):
+            text = raw_bytes.decode("utf-8")
+            reader = csv.DictReader(io.StringIO(text))
+            rows = list(reader)
+            if not rows:
+                return JSONResponse(status_code=400, content={"error": "CSV has no data rows"})
+            if len(rows) > 1:
+                warnings.append(f"File contained {len(rows)} rows; only the first was created.")
+            row = rows[0]
+            for int_field in ("ask_amount", "valuation"):
+                if int_field in row and row[int_field] not in (None, ""):
+                    try:
+                        row[int_field] = int(float(row[int_field]))
+                    except (TypeError, ValueError):
+                        return JSONResponse(
+                            status_code=400,
+                            content={"error": f"Could not parse {int_field}={row[int_field]!r} as integer"},
+                        )
+        else:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Unsupported file type. Use .json or .csv."},
+            )
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return JSONResponse(status_code=400, content={"error": f"Failed to parse file: {exc}"})
+
+    try:
+        validated = NewDealInput(**row)
+    except ValidationError as exc:
+        return JSONResponse(status_code=400, content={"error": "Validation failed", "detail": exc.errors()})
+
+    result = await _create_deal_via_mcp(request, validated.model_dump())
+    if "error" in result:
+        status = 409 if "already exists" in result["error"] else 400
+        return JSONResponse(status_code=status, content={**result, "warnings": warnings})
+    return {"deal": result, "warnings": warnings}
+
+
+@app.post("/deals/from-chat")
+async def deal_from_chat(body: ChatDealRequest, request: Request):
+    """Stream an AI-assisted Q&A session that gathers deal fields and creates the deal when ready."""
+    await ensure_mcp_connected(request)
+    mcp_client: MCPClient = request.app.state.mcp
+
+    async def event_stream():
+        async for event in run_deal_intake(body.message, body.conversation_history, mcp_client):
+            evt_type = event["event"]
+            payload = json.dumps(event["data"])
+            yield f"event: {evt_type}\ndata: {payload}\n\n"
+        yield "event: done\ndata: {}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
 @app.post("/triage/{deal_id}")
