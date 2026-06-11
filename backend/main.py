@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.mcp_server.server import mcp
+from mcp_server.server import mcp
 
 
 @asynccontextmanager
@@ -39,14 +39,14 @@ def health():
 
 @app.get("/graph/data")
 def graph_data():
-    from backend.connectors.graph import get_full_graph
+    from connectors.graph import get_full_graph
 
     return get_full_graph()
 
 
 @app.get("/audit/logs")
 def audit_logs():
-    from backend.connectors.audit import generate_audit_logs
+    from connectors.audit import generate_audit_logs
 
     return generate_audit_logs()
 
@@ -59,7 +59,7 @@ app.mount("/mcp", mcp.streamable_http_app())
 def run():
     import os
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 
 
 if __name__ == "__main__":

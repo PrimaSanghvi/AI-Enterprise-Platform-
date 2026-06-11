@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 
-from backend.rag.ingestion import get_embedding_model, get_vector_store
+from rag.ingestion import get_embedding_model, get_vector_store
 
 logger = logging.getLogger(__name__)
 

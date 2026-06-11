@@ -26,7 +26,7 @@ def search_documents(
     via the RAG pipeline. Falls back to keyword search if RAG fails.
     """
     try:
-        from backend.rag.retrieval import search as rag_search
+        from rag.retrieval import search as rag_search
 
         results = rag_search(query, deal_id=deal_id, sector=sector, top_k=5)
         return [

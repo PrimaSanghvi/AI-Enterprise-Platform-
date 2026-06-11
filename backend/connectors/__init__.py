@@ -1,6 +1,6 @@
 """Connector registry — maps MCP tool prefixes to display names."""
 
-from backend.connectors import backstop, files, graph, policy, snowflake
+from connectors import backstop, files, graph, policy, snowflake
 
 # Maps the tool-name prefix to the connector's display name.
 # Built from each connector module's DISPLAY_NAME constant.

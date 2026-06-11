@@ -2,7 +2,7 @@ import json
 
 from mcp.server.fastmcp import FastMCP
 
-from backend.connectors import backstop
+from connectors import backstop
 
 
 def register_tools(mcp: FastMCP):
