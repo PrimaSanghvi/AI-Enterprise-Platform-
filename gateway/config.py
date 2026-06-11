@@ -13,3 +13,11 @@ ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
     "http://localhost:3000,http://localhost:5173",
 ).split(",")
+
+# --- Login module ---
+# Google OAuth client ID used to verify ID tokens from the browser.
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+# Secret used to sign our own session tokens. MUST be set in production.
+SESSION_SECRET = os.getenv("SESSION_SECRET", "dev-insecure-session-secret-change-me")
+# How long a user may access the system from their first login, in hours.
+ACCESS_WINDOW_HOURS = float(os.getenv("ACCESS_WINDOW_HOURS", "2"))

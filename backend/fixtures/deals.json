@@ -6,7 +6,7 @@
     "sector": "Healthcare",
     "stage": "Series B",
     "status": "due_diligence",
-    "source": "Inbound — founder referral via Dr. Elena Vasquez",
+    "source": "Inbound \u2014 founder referral via Dr. Elena Vasquez",
     "date_received": "2025-11-03",
     "ask_amount": 25000000,
     "valuation": 180000000,
@@ -27,7 +27,7 @@
     "sector": "Climate",
     "stage": "Series A",
     "status": "screening",
-    "source": "Outbound — Climate Week NYC conference",
+    "source": "Outbound \u2014 Climate Week NYC conference",
     "date_received": "2025-12-15",
     "ask_amount": 12000000,
     "valuation": 60000000,
@@ -41,7 +41,7 @@
     "sector": "FinTech",
     "stage": "Series B",
     "status": "ic_review",
-    "source": "Inbound — co-investor intro from Sequoia",
+    "source": "Inbound \u2014 co-investor intro from Sequoia",
     "date_received": "2025-09-22",
     "ask_amount": 40000000,
     "valuation": 320000000,
@@ -51,7 +51,7 @@
         "timestamp": "2025-09-28T10:00:00Z",
         "analyst": "Priya Sharma",
         "decision": "advance",
-        "rationale": "Exceptional growth metrics — 4x YoY TPV growth. Strong unit economics with 72% gross margin. Market timing is right with real-time payments adoption accelerating."
+        "rationale": "Exceptional growth metrics \u2014 4x YoY TPV growth. Strong unit economics with 72% gross margin. Market timing is right with real-time payments adoption accelerating."
       },
       {
         "timestamp": "2025-10-15T16:45:00Z",
@@ -68,7 +68,7 @@
     "sector": "Healthcare",
     "stage": "Series A",
     "status": "screening",
-    "source": "Inbound — Stanford AI Lab spinout, warm intro via LP network",
+    "source": "Inbound \u2014 Stanford AI Lab spinout, warm intro via LP network",
     "date_received": "2026-01-08",
     "ask_amount": 15000000,
     "valuation": 75000000,
@@ -82,7 +82,7 @@
     "sector": "Climate",
     "stage": "Growth",
     "status": "due_diligence",
-    "source": "Outbound — identified via Rialto energy thesis mapping",
+    "source": "Outbound \u2014 identified via Rialto energy thesis mapping",
     "date_received": "2025-10-01",
     "ask_amount": 60000000,
     "valuation": 520000000,
@@ -103,7 +103,7 @@
     "sector": "FinTech",
     "stage": "Seed",
     "status": "screening",
-    "source": "Inbound — YC W25 demo day",
+    "source": "Inbound \u2014 YC W25 demo day",
     "date_received": "2026-02-20",
     "ask_amount": 4000000,
     "valuation": 20000000,
@@ -117,7 +117,7 @@
     "sector": "Healthcare",
     "stage": "Series C",
     "status": "closed",
-    "source": "Inbound — board member referral",
+    "source": "Inbound \u2014 board member referral",
     "date_received": "2025-06-15",
     "ask_amount": 50000000,
     "valuation": 410000000,
@@ -133,7 +133,7 @@
         "timestamp": "2025-07-10T14:30:00Z",
         "analyst": "Priya Sharma",
         "decision": "advance",
-        "rationale": "Clinical data compelling — 94% sensitivity, 91% specificity across all indications. IP portfolio is defensible with 18 granted patents. Recommend IC."
+        "rationale": "Clinical data compelling \u2014 94% sensitivity, 91% specificity across all indications. IP portfolio is defensible with 18 granted patents. Recommend IC."
       },
       {
         "timestamp": "2025-08-01T09:00:00Z",
@@ -150,7 +150,7 @@
     "sector": "Climate",
     "stage": "Series B",
     "status": "due_diligence",
-    "source": "Outbound — direct outreach after Nature paper on DAC efficiency",
+    "source": "Outbound \u2014 direct outreach after Nature paper on DAC efficiency",
     "date_received": "2025-12-01",
     "ask_amount": 30000000,
     "valuation": 200000000,
@@ -163,5 +163,19 @@
         "rationale": "Breakthrough DAC technology but unit economics still unproven at scale. Need to see pilot plant data from Q1 2026 before advancing. Revisit in 60 days."
       }
     ]
+  },
+  {
+    "deal_id": "DEAL-009",
+    "company_id": "CO-009",
+    "company_name": "XYZ",
+    "sector": "Climate",
+    "stage": "Series C",
+    "status": "new",
+    "source": "user-created",
+    "date_received": "2026-06-05",
+    "ask_amount": 100000,
+    "valuation": 200000,
+    "lead_partner": null,
+    "triage_results": []
   }
 ]

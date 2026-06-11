@@ -41,3 +41,28 @@ class TriageOutput(BaseModel):
     confidence: float
     connectors_used: list[str] = []
     strategy: str = "triage_workflow"
+
+
+class NewDealInput(BaseModel):
+    company_name: str
+    sector: str
+    stage: str
+    status: str
+    ask_amount: int
+    valuation: int
+    company_id: str | None = None
+    deal_id: str | None = None
+    source: str | None = None
+    lead_partner: str | None = None
+    date_received: str | None = None
+
+
+class ChatDealRequest(BaseModel):
+    message: str
+    conversation_history: list[dict] = []
+
+
+class GoogleAuthRequest(BaseModel):
+    """The Google ID token (JWT credential) returned by Google Identity Services."""
+
+    credential: str
