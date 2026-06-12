@@ -11,8 +11,8 @@ from __future__ import annotations
 import hashlib
 import logging
 
-from backend.rag.embeddings import EmbeddingModel
-from backend.rag.vector_store import VectorStore
+from rag.embeddings import EmbeddingModel
+from rag.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
 

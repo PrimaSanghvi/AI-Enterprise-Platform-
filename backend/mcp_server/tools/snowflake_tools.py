@@ -2,7 +2,7 @@ import json
 
 from mcp.server.fastmcp import FastMCP
 
-from backend.connectors import snowflake
+from connectors import snowflake
 
 
 def register_tools(mcp: FastMCP):

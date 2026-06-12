@@ -7,8 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from backend.mcp_server.server import mcp
-from backend.security import AuthError, require_active_user, verify_mcp_credentials
+from mcp_server.server import mcp
 
 
 @asynccontextmanager
@@ -76,14 +75,14 @@ def health():
 
 @app.get("/graph/data")
 def graph_data():
-    from backend.connectors.graph import get_full_graph
+    from connectors.graph import get_full_graph
 
     return get_full_graph()
 
 
 @app.get("/audit/logs")
 def audit_logs():
-    from backend.connectors.audit import generate_audit_logs
+    from connectors.audit import generate_audit_logs
 
     return generate_audit_logs()
 
@@ -97,7 +96,7 @@ def run():
     # Bind to localhost only: this app is internal/redundant (the gateway is the
     # public entrypoint), so it should not be reachable off-host.
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=port, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 
 
 if __name__ == "__main__":

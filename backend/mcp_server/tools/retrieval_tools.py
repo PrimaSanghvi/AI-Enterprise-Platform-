@@ -2,7 +2,7 @@ import json
 
 from mcp.server.fastmcp import FastMCP
 
-from backend.connectors import files
+from connectors import files
 
 
 def register_tools(mcp: FastMCP):
@@ -21,7 +21,7 @@ def register_tools(mcp: FastMCP):
     @mcp.tool(name="retrieval.get_chunk")
     def get_chunk(chunk_id: str) -> str:
         """Fetch a specific document chunk by its chunk_id. Useful for citation drill-down."""
-        from backend.rag.ingestion import get_chunk_by_id
+        from rag.ingestion import get_chunk_by_id
 
         chunk = get_chunk_by_id(chunk_id)
         if not chunk:
