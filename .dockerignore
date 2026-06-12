@@ -1,0 +1,28 @@
+# Secrets — never bake into the image (provide via runtime env / Secret Manager)
+.env
+
+# Python virtualenvs and caches
+.venv/
+venv/
+**/__pycache__/
+**/*.pyc
+*.egg-info/
+.pytest_cache/
+.python-version
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# VCS / editor / OS
+.git/
+.gitignore
+.DS_Store
+
+# Not needed at runtime
+tests/
+sample_deal.csv
+sample_deal.json
+README.md
+Dockerfile
+.dockerignore

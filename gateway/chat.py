@@ -13,6 +13,14 @@ from gateway.intent_classifier import IntentClassifier
 from gateway.mcp_client import MCPClient
 from gateway.models import ChatResponse
 
+# The chat agent is read-only. Its permitted tools are exactly the union of the
+# classifier's strategy tool sets (all read tools) — derived here so the two
+# never drift. The `lookup` set is the safe default when intent filtering is empty.
+CHAT_ALLOWED_TOOLS = {
+    name for cfg in IntentClassifier.STRATEGIES.values() for name in cfg["tools"]
+}
+CHAT_DEFAULT_TOOLS = set(IntentClassifier.STRATEGIES["lookup"]["tools"])
+
 SYSTEM_PROMPT = """\
 You are Rialto's AI investment analyst assistant. You only answer questions based on \
 data retrieved from the available MCP tools.
@@ -122,9 +130,10 @@ async def run_chat(
 
     all_tools = await mcp.list_tools()
     tools = [t for t in all_tools if t["name"] in intent.tools]
-    # Safety fallback: if filtering left nothing, use all tools
+    # Fail safe, never open: if intent filtering matched nothing, fall back to the
+    # read-only lookup set — NOT all tools.
     if not tools:
-        tools = all_tools
+        tools = [t for t in all_tools if t["name"] in CHAT_DEFAULT_TOOLS]
 
     # Build messages from conversation history + new message
     messages: list[dict] = []
@@ -165,7 +174,12 @@ async def run_chat(
                     },
                 }
 
-                result_text = await mcp.call_tool(block.name, block.input)
+                # Defense-in-depth: only ever dispatch read tools on the chat
+                # allow-list, regardless of what the model requests.
+                if block.name not in CHAT_ALLOWED_TOOLS:
+                    result_text = f"ERROR: tool '{block.name}' is not permitted in chat."
+                else:
+                    result_text = await mcp.call_tool(block.name, block.input)
                 yield {
                     "event": "tool_result",
                     "data": {

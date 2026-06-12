@@ -66,8 +66,13 @@ async def run_deal_intake(
 
     all_tools = await mcp.list_tools()
     tools = [t for t in all_tools if t["name"] in ALLOWED_TOOLS]
+    # Fail closed: if no allow-listed tool is available, do not widen to all tools.
     if not tools:
-        tools = all_tools
+        yield {
+            "event": "error",
+            "data": {"detail": "Deal-intake tools are unavailable; refusing to proceed."},
+        }
+        return
 
     messages: list[dict] = []
     for entry in conversation_history:
@@ -100,7 +105,11 @@ async def run_deal_intake(
                     "event": "tool_call",
                     "data": {"tool": block.name, "connector": connector, "input": block.input},
                 }
-                result_text = await mcp.call_tool(block.name, block.input)
+                # Defense-in-depth: never dispatch a tool outside the allow-list.
+                if block.name not in ALLOWED_TOOLS:
+                    result_text = f"ERROR: tool '{block.name}' is not permitted for deal intake."
+                else:
+                    result_text = await mcp.call_tool(block.name, block.input)
                 yield {
                     "event": "tool_result",
                     "data": {"tool": block.name, "connector": connector, "result_preview": result_text[:300]},

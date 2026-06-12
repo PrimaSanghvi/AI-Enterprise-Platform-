@@ -1,6 +1,6 @@
 import type { ChatMessage } from "../types/chat";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3000";
 
 export interface SSEEvent {
   event: string;

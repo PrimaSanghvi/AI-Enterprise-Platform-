@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from contextlib import AsyncExitStack
 
+import httpx
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from mcp.shared.exceptions import McpError
@@ -11,10 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 class MCPClient:
-    """Wrapper around the MCP Python SDK for connecting to a Streamable HTTP server."""
+    """Wrapper around the MCP Python SDK for connecting to a Streamable HTTP server.
 
-    def __init__(self, server_url: str):
+    `headers` are attached to every transport request — used to present the
+    gateway's internal service credentials to the now-protected /mcp mount.
+    """
+
+    def __init__(self, server_url: str, headers: dict | None = None):
         self._server_url = server_url
+        self._headers = headers or None
         self._session: ClientSession | None = None
         self._exit_stack: AsyncExitStack | None = None
         self._name_map: dict[str, str] = {}  # anthropic_name → mcp_name
@@ -23,8 +29,15 @@ class MCPClient:
         """Open the transport and initialise the MCP session."""
         stack = AsyncExitStack()
         await stack.__aenter__()
+        http_client = None
+        if self._headers:
+            # follow_redirects matches the SDK's default client; the /mcp mount
+            # 307-redirects to /mcp/, and our default headers carry across it.
+            http_client = await stack.enter_async_context(
+                httpx.AsyncClient(headers=self._headers, follow_redirects=True)
+            )
         read_stream, write_stream, _ = await stack.enter_async_context(
-            streamable_http_client(self._server_url)
+            streamable_http_client(self._server_url, http_client=http_client)
         )
         session = await stack.enter_async_context(
             ClientSession(read_stream, write_stream)

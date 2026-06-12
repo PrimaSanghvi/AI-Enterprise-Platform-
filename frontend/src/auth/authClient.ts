@@ -3,7 +3,7 @@
 // triggers a logout + redirect to the login page. Installed once at app start so
 // the many scattered `fetch(${API_BASE}/...)` call sites don't each need editing.
 
-export const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+export const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3000";
 export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
 const TOKEN_KEY = "rialto.session.token";
@@ -75,6 +75,24 @@ function resolveUrl(input: RequestInfo | URL): string {
   return String(input);
 }
 
+/**
+ * Whether a request targets our own API — so we never attach the session token
+ * (or react to 401s) for third-party requests. With an absolute API_BASE we
+ * prefix-match it; in same-origin mode (API_BASE === "") a relative path counts,
+ * and an absolute URL only counts if it matches our own origin.
+ */
+function isApiRequest(url: string): boolean {
+  if (API_BASE) return url.startsWith(API_BASE);
+  if (/^https?:\/\//i.test(url)) {
+    try {
+      return new URL(url).origin === window.location.origin;
+    } catch {
+      return false;
+    }
+  }
+  return true; // relative URL → same origin
+}
+
 export function installFetchInterceptor(): void {
   if (installed) return;
   installed = true;
@@ -82,7 +100,7 @@ export function installFetchInterceptor(): void {
 
   window.fetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
     const url = resolveUrl(input);
-    const isApi = url.startsWith(API_BASE);
+    const isApi = isApiRequest(url);
 
     let nextInit = init;
     if (isApi && token) {
