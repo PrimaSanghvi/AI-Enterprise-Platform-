@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import csv
 import io
 import json
@@ -11,63 +12,210 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+from starlette.middleware.base import BaseHTTPMiddleware
 
+from gateway import ratelimit
 from gateway.agent import run_triage
+from gateway.auth import AuthError, login, require_active_user, verify_mcp_credentials
 from gateway.chat import run_chat
-from gateway.config import GATEWAY_PORT, MCP_SERVER_URL, ALLOWED_ORIGINS
+from gateway.config import (
+    ALLOWED_ORIGINS,
+    GATEWAY_PORT,
+    MCP_INTERNAL_TOKEN,
+    MCP_SERVER_URL,
+    POLICY_ADMIN_ROLE,
+)
 from gateway.deal_intake_agent import run_deal_intake
 from gateway.mcp_client import MCPClient
-from gateway.models import ChatDealRequest, NewDealInput
+from gateway.models import ChatDealRequest, GoogleAuthRequest, NewDealInput
 
 from backend.mcp_server.server import mcp as mcp_server
+from backend.security import issue_service_token
+
+
+async def _warmup_mcp(app: FastAPI) -> None:
+    """Connect the MCP client in the background after the HTTP server is ready.
+
+    Runs concurrently with the server so the first real browser request finds
+    MCP already connected instead of paying the full connection cost.
+    """
+    await asyncio.sleep(1)  # give uvicorn a moment to finish binding
+    for attempt in range(1, 4):
+        try:
+            async with app.state.mcp_lock:
+                if not app.state.mcp_connected:
+                    await app.state.mcp.connect()
+                    app.state.mcp_connected = True
+            return
+        except Exception:
+            await asyncio.sleep(attempt)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Start / stop the persistent MCP client session.
-
-    The MCP backend is mounted in-process at /mcp.  The client connects
-    to it via localhost on the first request, avoiding any cross-service
-    networking issues on Render.
-    """
     async with mcp_server.session_manager.run():
-        mcp_client = MCPClient(f"http://localhost:{GATEWAY_PORT}/mcp")
+        # The /mcp mount now requires the internal token AND a session token, so
+        # the gateway's own client presents both: the shared internal secret and
+        # a long-lived service session token.
+        mcp_headers = {
+            "X-Internal-Token": MCP_INTERNAL_TOKEN,
+            "Authorization": f"Bearer {issue_service_token()}",
+        }
+        # Trailing slash avoids the /mcp -> /mcp/ redirect (which the catch-all
+        # StaticFiles mount at "/" disrupts), connecting straight to the sub-app.
+        mcp_client = MCPClient(f"http://localhost:{GATEWAY_PORT}/mcp/", headers=mcp_headers)
         app.state.mcp = mcp_client
         app.state.mcp_connected = False
+        app.state.mcp_lock = asyncio.Lock()
+
+        # Proactively connect MCP so it is ready before the first browser request
+        asyncio.create_task(_warmup_mcp(app))
+
         yield
         await mcp_client.disconnect()
 
 
 async def ensure_mcp_connected(request: Request):
-    """Lazily connect to MCP backend on first request."""
-    import asyncio
+    """Ensure MCP is connected before calling a tool.
 
+    Uses a lock so concurrent requests never race to call connect() at the
+    same time — only one attempt runs, others wait and reuse the result.
+    """
     if request.app.state.mcp_connected:
         return
-    mcp_client: MCPClient = request.app.state.mcp
-    retries = 5
-    for attempt in range(1, retries + 1):
-        try:
-            await mcp_client.connect()
-            request.app.state.mcp_connected = True
+    async with request.app.state.mcp_lock:
+        if request.app.state.mcp_connected:  # re-check after acquiring lock
             return
-        except Exception as exc:
-            if attempt == retries:
-                raise RuntimeError(
-                    f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
-                    f"Is the backend running? Error: {exc}"
-                ) from exc
-            await asyncio.sleep(3 * attempt)  # progressive backoff
+        for attempt in range(1, 4):
+            try:
+                await request.app.state.mcp.connect()
+                request.app.state.mcp_connected = True
+                return
+            except Exception as exc:
+                if attempt == 3:
+                    raise RuntimeError(
+                        f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
+                        f"Is the backend running? Error: {exc}"
+                    ) from exc
+                await asyncio.sleep(0.5 * attempt)
 
 
 app = FastAPI(title="Rialto AI Gateway", lifespan=lifespan)
+
+
+# --- Authenticate every request ---
+# Public paths require no credential. /auth is the login flow. /mcp is NOT public:
+# it requires the internal service token AND a session token (handled below).
+_AUTH_PUBLIC_PATHS = {"/health", "/docs", "/redoc", "/openapi.json"}
+_AUTH_PUBLIC_PREFIXES = ("/auth",)
+
+# The built SPA must load before login, so its static assets are public (GET only,
+# no sensitive data). The app entry is "/" (index.html); Vite emits hashed bundles
+# under /assets plus public/ files (logos, icons) at the root. We match those by
+# path/extension — no API route ends in a static-file extension.
+_STATIC_PUBLIC_PATHS = {"/", "/index.html"}
+_STATIC_PUBLIC_PREFIXES = ("/assets",)
+_STATIC_PUBLIC_SUFFIXES = (
+    ".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp",
+    ".woff", ".woff2", ".ttf", ".map", ".json", ".txt", ".webmanifest",
+)
+
+
+def _is_public_static(path: str) -> bool:
+    return (
+        path in _STATIC_PUBLIC_PATHS
+        or path.startswith(_STATIC_PUBLIC_PREFIXES)
+        or path.endswith(_STATIC_PUBLIC_SUFFIXES)
+    )
+
+
+def _bearer_token(request: Request) -> str:
+    header = request.headers.get("authorization", "")
+    if header.lower().startswith("bearer "):
+        return header[7:].strip()
+    return ""
+
+
+def _auth_error_response(exc: AuthError) -> JSONResponse:
+    return JSONResponse(
+        status_code=401,
+        content={"error": exc.message, "code": "expired" if exc.expired else "unauthorized"},
+    )
+
+
+async def auth_dispatch(request: Request, call_next):
+    path = request.url.path
+    if (
+        request.method == "OPTIONS"
+        or path in _AUTH_PUBLIC_PATHS
+        or any(path.startswith(p) for p in _AUTH_PUBLIC_PREFIXES)
+    ):
+        return await call_next(request)
+
+    # Public static frontend assets (GET/HEAD only).
+    if request.method in ("GET", "HEAD") and _is_public_static(path):
+        return await call_next(request)
+
+    # The MCP mount requires dual credentials (internal token + session token).
+    if path.startswith("/mcp"):
+        try:
+            request.state.user = verify_mcp_credentials(
+                request.headers.get("x-internal-token"), _bearer_token(request)
+            )
+        except AuthError as exc:
+            return _auth_error_response(exc)
+        return await call_next(request)
+
+    token = _bearer_token(request)
+    if not token:
+        return JSONResponse(
+            status_code=401,
+            content={"error": "Not authenticated.", "code": "unauthenticated"},
+        )
+    try:
+        request.state.user = require_active_user(token)
+    except AuthError as exc:
+        return _auth_error_response(exc)
+    return await call_next(request)
+
+
+def _require_admin(request: Request) -> JSONResponse | None:
+    """Return a 403 response unless the caller holds the policy-admin role."""
+    role = (getattr(request.state, "user", None) or {}).get("role")
+    if role != POLICY_ADMIN_ROLE:
+        return JSONResponse(
+            status_code=403,
+            content={"error": f"Requires role '{POLICY_ADMIN_ROLE}'.", "code": "forbidden"},
+        )
+    return None
+
+
+def _rate_limit(request: Request, bucket: str) -> JSONResponse | None:
+    """Return a 429 response if the caller has exceeded the agent rate limit."""
+    identity = (getattr(request.state, "user", None) or {}).get("email", "anonymous")
+    try:
+        ratelimit.check(identity, bucket)
+    except ratelimit.RateLimitExceeded as exc:
+        return JSONResponse(
+            status_code=429,
+            content={"error": "Rate limit exceeded. Please slow down.", "code": "rate_limited"},
+            headers={"Retry-After": str(int(exc.retry_after) + 1)},
+        )
+    return None
+
+
+# Registered BEFORE CORS so CORS stays the outermost middleware and attaches
+# headers to 401 responses too (otherwise the browser can't read the expiry).
+app.add_middleware(BaseHTTPMiddleware, dispatch=auth_dispatch)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Internal-Token"],
 )
 
 # Mount MCP server in-process so gateway talks to localhost
@@ -77,6 +225,33 @@ app.mount("/mcp", mcp_server.streamable_http_app())
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/auth/google")
+async def auth_google(body: GoogleAuthRequest):
+    """Exchange a Google ID token for a session token, enforcing the 2-hour window."""
+    try:
+        return login(body.credential)
+    except AuthError as exc:
+        return JSONResponse(
+            status_code=exc.status,
+            content={"error": exc.message, "code": "expired" if exc.expired else "error"},
+        )
+
+
+@app.get("/auth/me")
+async def auth_me(request: Request):
+    """Return the current user if their session is still valid (used on app load)."""
+    token = _bearer_token(request)
+    if not token:
+        return JSONResponse(status_code=401, content={"error": "Not authenticated.", "code": "unauthenticated"})
+    try:
+        return require_active_user(token)
+    except AuthError as exc:
+        return JSONResponse(
+            status_code=401,
+            content={"error": exc.message, "code": "expired" if exc.expired else "unauthorized"},
+        )
 
 
 @app.get("/deals")
@@ -169,6 +344,9 @@ async def upload_deal(request: Request, file: UploadFile = File(...)):
 @app.post("/deals/from-chat")
 async def deal_from_chat(body: ChatDealRequest, request: Request):
     """Stream an AI-assisted Q&A session that gathers deal fields and creates the deal when ready."""
+    limited = _rate_limit(request, "deal_intake")
+    if limited:
+        return limited
     await ensure_mcp_connected(request)
     mcp_client: MCPClient = request.app.state.mcp
 
@@ -185,6 +363,9 @@ async def deal_from_chat(body: ChatDealRequest, request: Request):
 @app.post("/triage/{deal_id}")
 async def triage_deal(deal_id: str, request: Request):
     """Run AI triage for a deal, streaming tool-call events via SSE."""
+    limited = _rate_limit(request, "triage")
+    if limited:
+        return limited
     await ensure_mcp_connected(request)
     mcp_client: MCPClient = request.app.state.mcp
 
@@ -206,6 +387,9 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 async def chat(body: ChatRequest, request: Request):
     """Chat with the AI analyst, streaming tool-call events via SSE."""
+    limited = _rate_limit(request, "chat")
+    if limited:
+        return limited
     await ensure_mcp_connected(request)
     mcp_client: MCPClient = request.app.state.mcp
 
@@ -222,61 +406,8 @@ async def chat(body: ChatRequest, request: Request):
 @app.get("/graph/data")
 async def graph_data():
     """Return relationship graph data as nodes + edges for visualization."""
-    import json as _json
-    from pathlib import Path
-
-    fixtures = Path(__file__).resolve().parent.parent / "backend" / "fixtures"
-
-    with open(fixtures / "relationships.json") as f:
-        relationships = _json.load(f)
-
-    with open(fixtures / "deals.json") as f:
-        deals = _json.load(f)
-
-    # Build company → deal mapping
-    company_deals = {}
-    for deal in deals:
-        company_deals[deal["company_id"]] = deal
-
-    nodes = []
-    edges = []
-    seen_nodes = set()
-
-    for company_id, data in relationships.items():
-        company_name = data["company_name"]
-        deal = company_deals.get(company_id, {})
-
-        # Company node
-        if company_id not in seen_nodes:
-            nodes.append({
-                "id": company_id,
-                "label": company_name,
-                "type": "company",
-                "sector": deal.get("sector", ""),
-                "deal_id": deal.get("deal_id", ""),
-            })
-            seen_nodes.add(company_id)
-
-        # Relationship nodes + edges
-        for rel in data.get("relationships", []):
-            entity_id = rel["entity_id"]
-            if entity_id not in seen_nodes:
-                nodes.append({
-                    "id": entity_id,
-                    "label": rel["name"],
-                    "type": rel["type"],
-                    "details": rel.get("details", ""),
-                })
-                seen_nodes.add(entity_id)
-
-            edges.append({
-                "source": company_id,
-                "target": entity_id,
-                "relationship": rel["type"],
-                "details": rel.get("details", ""),
-            })
-
-    return {"nodes": nodes, "edges": edges}
+    from backend.connectors.graph import get_full_graph
+    return get_full_graph()
 
 
 @app.get("/audit/logs")
@@ -322,8 +453,11 @@ class CreatePolicyRuleRequest(BaseModel):
 
 
 @app.post("/policy/rules")
-async def create_policy_rule(body: CreatePolicyRuleRequest):
-    """Create a new policy rule."""
+async def create_policy_rule(body: CreatePolicyRuleRequest, request: Request):
+    """Create a new policy rule. Restricted to the policy-admin role."""
+    denied = _require_admin(request)
+    if denied:
+        return denied
     from backend.connectors.policy import create_rule
 
     rule = create_rule(
@@ -349,8 +483,11 @@ class UpdatePolicyRuleRequest(BaseModel):
 
 
 @app.put("/policy/rules/{rule_id}")
-async def update_policy_rule(rule_id: str, body: UpdatePolicyRuleRequest):
-    """Update an existing policy rule."""
+async def update_policy_rule(rule_id: str, body: UpdatePolicyRuleRequest, request: Request):
+    """Update an existing policy rule. Restricted to the policy-admin role."""
+    denied = _require_admin(request)
+    if denied:
+        return denied
     from backend.connectors.policy import update_rule
 
     updates = {k: v for k, v in body.model_dump().items() if v is not None}
@@ -363,8 +500,11 @@ async def update_policy_rule(rule_id: str, body: UpdatePolicyRuleRequest):
 
 
 @app.delete("/policy/rules/{rule_id}")
-async def delete_policy_rule(rule_id: str):
-    """Delete a policy rule."""
+async def delete_policy_rule(rule_id: str, request: Request):
+    """Delete a policy rule. Restricted to the policy-admin role."""
+    denied = _require_admin(request)
+    if denied:
+        return denied
     from backend.connectors.policy import delete_rule
 
     deleted = delete_rule(rule_id)
@@ -447,6 +587,14 @@ async def rag_stats():
         },
         "documents": list(docs.values()),
     }
+
+
+# Serve the built frontend (single-container deploys). Mounted LAST so it only
+# catches paths not matched by an API route or the /mcp mount. Skipped in dev,
+# where the frontend runs separately under Vite and this directory is absent.
+_FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+if _FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=_FRONTEND_DIST, html=True), name="frontend")
 
 
 def run():

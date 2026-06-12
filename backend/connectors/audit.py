@@ -1,19 +1,12 @@
 """Generate realistic audit logs from fixture data."""
 
 import hashlib
-import json
 import random
 from datetime import datetime, timedelta
-from pathlib import Path
 
-FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
+from backend.db import SCHEMA, query as db_query
 
 DISPLAY_NAME = "Audit Logs"
-
-
-def _load(filename: str) -> dict | list:
-    with open(FIXTURES_DIR / filename) as f:
-        return json.load(f)
 
 
 # Deterministic seed so the same logs are generated every time
@@ -59,12 +52,41 @@ def _stable_latency(seed_str: str, base: int, spread: int) -> int:
 
 
 def generate_audit_logs() -> list[dict]:
-    """Build audit log entries from all fixture data."""
-    deals = _load("deals.json")
-    companies = {c["company_id"]: c for c in _load("companies.json")}
-    files = _load("deal_files.json")
-    relationships: dict = _load("relationships.json")
-    documents = _load("documents.json")
+    """Build audit log entries from Postgres data."""
+    # Load deals with triage_results nested (same shape as the old deals.json)
+    deals_raw = db_query(f"SELECT * FROM {SCHEMA}.deals")
+    triage_raw = db_query(f"SELECT * FROM {SCHEMA}.triage_results ORDER BY created_at ASC")
+    triage_map: dict[str, list] = {}
+    for t in triage_raw:
+        triage_map.setdefault(t["deal_id"], []).append({
+            "timestamp": t["created_at"] or "",
+            "analyst": t["analyst"],
+            "decision": t["decision"],
+            "rationale": t["rationale"],
+        })
+    deals = []
+    for d in deals_raw:
+        d["triage_results"] = triage_map.get(d["deal_id"], [])
+        deals.append(d)
+
+    companies = {c["company_id"]: c for c in db_query(f"SELECT * FROM {SCHEMA}.companies")}
+    files = db_query(f"SELECT * FROM {SCHEMA}.deal_files")
+
+    # Reconstruct relationships as {company_id: {"relationships": [...]}} — same shape as old relationships.json
+    rel_rows = db_query(f"SELECT * FROM {SCHEMA}.entity_relationships")
+    relationships: dict = {}
+    for r in rel_rows:
+        cid = r["company_id"]
+        if cid not in relationships:
+            relationships[cid] = {"relationships": []}
+        relationships[cid]["relationships"].append({
+            "entity_id": r["entity_id"],
+            "name": r["name"],
+            "type": r["type"],
+            "details": r["details"],
+        })
+
+    documents = db_query(f"SELECT chunk_id, deal_id FROM {SCHEMA}.document_chunks")
 
     # Build deal lookup
     deal_map = {}

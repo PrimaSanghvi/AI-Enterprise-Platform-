@@ -37,6 +37,17 @@ After gathering all information, provide your triage assessment as a JSON object
 Wrap your final JSON output in <triage_result>...</triage_result> tags.
 """
 
+# Triage only needs read tools to gather context. Both dotted and underscore
+# forms are listed because the MCP transport may surface either.
+ALLOWED_TRIAGE_TOOLS = {
+    "backstop.get_deal", "backstop_get_deal",
+    "backstop.get_company", "backstop_get_company",
+    "graph.get_relationships", "graph_get_relationships",
+    "retrieval.search", "retrieval_search",
+    "snowflake.portfolio_overlap", "snowflake_portfolio_overlap",
+    "files.list_deal_files", "files_list_deal_files",
+}
+
 
 def _parse_triage_result(text: str, deal_id: str) -> dict:
     """Extract and validate the triage result from Claude's response."""
@@ -54,7 +65,7 @@ async def run_triage(
 ) -> AsyncGenerator[dict[str, Any], None]:
     """Run the triage agent loop, yielding SSE-style event dicts."""
     client = anthropic.AsyncAnthropic()
-    tools = await mcp.list_tools()
+    tools = [t for t in await mcp.list_tools() if t["name"] in ALLOWED_TRIAGE_TOOLS]
     messages: list[dict] = [
         {"role": "user", "content": f"Triage deal {deal_id}. Call the tools to gather all relevant context, then provide your structured assessment."},
     ]
@@ -86,7 +97,12 @@ async def run_triage(
                     "data": {"tool": block.name, "connector": connector, "input": block.input},
                 }
 
-                result_text = await mcp.call_tool(block.name, block.input)
+                # Defense-in-depth: never dispatch a tool outside the allow-list,
+                # even if the model is steered off-list by injected content.
+                if block.name not in ALLOWED_TRIAGE_TOOLS:
+                    result_text = f"ERROR: tool '{block.name}' is not permitted for triage."
+                else:
+                    result_text = await mcp.call_tool(block.name, block.input)
                 yield {
                     "event": "tool_result",
                     "data": {"tool": block.name, "connector": connector, "result_preview": result_text[:300]},

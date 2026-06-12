@@ -1,6 +1,6 @@
 """Document ingestion pipeline.
 
-Loads chunked documents from fixtures, generates embeddings,
+Loads chunked documents from Postgres, generates embeddings,
 and indexes them in the vector store.
 
 Per LLD Section 8.3: acquisition → enrichment → embedding → upsert.
@@ -9,16 +9,12 @@ Per LLD Section 8.3: acquisition → enrichment → embedding → upsert.
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
-from pathlib import Path
 
 from rag.embeddings import EmbeddingModel
 from rag.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
-
-FIXTURES_DIR = Path(__file__).parent.parent / "fixtures"
 
 # Singleton instances — initialized once, reused across requests
 _embedding_model: EmbeddingModel | None = None
@@ -41,9 +37,11 @@ def get_vector_store() -> VectorStore:
 
     logger.info("Initializing RAG ingestion pipeline...")
 
-    # Stage 1: Load documents
-    with open(FIXTURES_DIR / "documents.json") as f:
-        _chunks = json.load(f)
+    # Stage 1: Load documents from Postgres
+    from backend.db import SCHEMA, query as db_query
+    _chunks = db_query(
+        f"SELECT chunk_id, deal_id, sector, source_file, text, metadata FROM {SCHEMA}.document_chunks"
+    )
 
     logger.info("Loaded %d document chunks", len(_chunks))
 

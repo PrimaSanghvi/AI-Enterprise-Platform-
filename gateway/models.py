@@ -60,3 +60,9 @@ class NewDealInput(BaseModel):
 class ChatDealRequest(BaseModel):
     message: str
     conversation_history: list[dict] = []
+
+
+class GoogleAuthRequest(BaseModel):
+    """The Google ID token (JWT credential) returned by Google Identity Services."""
+
+    credential: str
