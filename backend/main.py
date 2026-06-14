@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-from gateway.auth import AuthError, require_active_user, verify_mcp_credentials
+from security import AuthError, require_active_user, verify_mcp_credentials
 
 from mcp_server.server import mcp
 
