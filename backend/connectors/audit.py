@@ -4,7 +4,7 @@ import hashlib
 import random
 from datetime import datetime, timedelta
 
-from backend.db import SCHEMA, query as db_query
+from db import SCHEMA, query as db_query
 
 DISPLAY_NAME = "Audit Logs"
 

@@ -1,4 +1,4 @@
-from backend.db import SCHEMA, execute, query
+from db import SCHEMA, execute, query
 import re
 from datetime import date, datetime, timezone
 

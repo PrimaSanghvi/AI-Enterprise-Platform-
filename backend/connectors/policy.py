@@ -3,7 +3,7 @@
 import json
 from datetime import datetime, timezone
 
-from backend.db import SCHEMA, execute, query
+from db import SCHEMA, execute, query
 
 DISPLAY_NAME = "Policy Engine"
 

@@ -12,7 +12,7 @@ the first administrator sign in without manual SQL.
 import os
 from datetime import datetime, timezone
 
-from backend.db import SCHEMA, execute, query
+from db import SCHEMA, execute, query
 
 DEFAULT_ROLE = "Analyst"
 ADMIN_ROLE = "Platform Admin"

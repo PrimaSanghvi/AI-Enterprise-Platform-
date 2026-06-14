@@ -1,4 +1,4 @@
-from backend.db import SCHEMA, query
+from db import SCHEMA, query
 
 DISPLAY_NAME = "Snowflake"
 

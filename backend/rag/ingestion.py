@@ -38,7 +38,7 @@ def get_vector_store() -> VectorStore:
     logger.info("Initializing RAG ingestion pipeline...")
 
     # Stage 1: Load documents from Postgres
-    from backend.db import SCHEMA, query as db_query
+    from db import SCHEMA, query as db_query
     _chunks = db_query(
         f"SELECT chunk_id, deal_id, sector, source_file, text, metadata FROM {SCHEMA}.document_chunks"
     )
