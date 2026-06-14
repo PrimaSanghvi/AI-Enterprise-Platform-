@@ -6,7 +6,7 @@ from typing import Any
 
 import anthropic
 
-from backend.connectors import CONNECTOR_DISPLAY_NAMES
+from connectors import CONNECTOR_DISPLAY_NAMES
 from gateway.config import ANTHROPIC_MODEL
 from gateway.mcp_client import MCPClient
 

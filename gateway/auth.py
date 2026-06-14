@@ -19,9 +19,9 @@ from datetime import timedelta
 import jwt
 from jwt import PyJWKClient
 
-from backend.connectors import user_access
+from connectors import user_access
 # Re-exported so existing imports (gateway.app) keep working.
-from backend.security import (  # noqa: F401
+from security import (  # noqa: F401
     AuthError,
     EXPIRED_MESSAGE,
     decode_session_token,

@@ -36,6 +36,7 @@ COPY --from=backend-builder /usr/local/bin /usr/local/bin
 
 # Backend source
 COPY backend/ ./
+COPY gateway/ ./gateway/
 
 # Built frontend — served as static files by FastAPI at "/"
 COPY --from=frontend-builder /app/frontend/dist ./public

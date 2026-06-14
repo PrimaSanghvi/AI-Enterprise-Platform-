@@ -22,7 +22,7 @@ from pathlib import Path
 import jwt
 from dotenv import load_dotenv
 
-from backend.connectors import user_access
+from connectors import user_access
 
 # Load the repo-root .env so secrets resolve regardless of which entrypoint
 # (gateway or backend/main.py) imported this module. Idempotent.

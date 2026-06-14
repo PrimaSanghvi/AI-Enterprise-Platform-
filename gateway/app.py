@@ -31,8 +31,8 @@ from gateway.deal_intake_agent import run_deal_intake
 from gateway.mcp_client import MCPClient
 from gateway.models import ChatDealRequest, GoogleAuthRequest, NewDealInput
 
-from backend.mcp_server.server import mcp as mcp_server
-from backend.security import issue_service_token
+from mcp_server.server import mcp as mcp_server
+from security import issue_service_token
 
 
 async def _warmup_mcp(app: FastAPI) -> None:
@@ -406,14 +406,14 @@ async def chat(body: ChatRequest, request: Request):
 @app.get("/graph/data")
 async def graph_data():
     """Return relationship graph data as nodes + edges for visualization."""
-    from backend.connectors.graph import get_full_graph
+    from connectors.graph import get_full_graph
     return get_full_graph()
 
 
 @app.get("/audit/logs")
 async def audit_logs():
     """Return audit logs generated from fixture data."""
-    from backend.connectors.audit import generate_audit_logs
+    from connectors.audit import generate_audit_logs
 
     return generate_audit_logs()
 
@@ -424,7 +424,7 @@ async def audit_logs():
 @app.get("/policy/rules")
 async def list_policy_rules(role: str = "", connector: str = ""):
     """Return all policy rules, optionally filtered by role and/or connector."""
-    from backend.connectors.policy import list_rules
+    from connectors.policy import list_rules
 
     return list_rules(role=role, connector=connector)
 
@@ -432,7 +432,7 @@ async def list_policy_rules(role: str = "", connector: str = ""):
 @app.get("/policy/rules/{rule_id}")
 async def get_policy_rule(rule_id: str):
     """Return a single policy rule by ID."""
-    from backend.connectors.policy import get_rule
+    from connectors.policy import get_rule
 
     rule = get_rule(rule_id)
     if not rule:
@@ -458,7 +458,7 @@ async def create_policy_rule(body: CreatePolicyRuleRequest, request: Request):
     denied = _require_admin(request)
     if denied:
         return denied
-    from backend.connectors.policy import create_rule
+    from connectors.policy import create_rule
 
     rule = create_rule(
         role=body.role,
@@ -488,7 +488,7 @@ async def update_policy_rule(rule_id: str, body: UpdatePolicyRuleRequest, reques
     denied = _require_admin(request)
     if denied:
         return denied
-    from backend.connectors.policy import update_rule
+    from connectors.policy import update_rule
 
     updates = {k: v for k, v in body.model_dump().items() if v is not None}
     result = update_rule(rule_id, updates)
@@ -505,7 +505,7 @@ async def delete_policy_rule(rule_id: str, request: Request):
     denied = _require_admin(request)
     if denied:
         return denied
-    from backend.connectors.policy import delete_rule
+    from connectors.policy import delete_rule
 
     deleted = delete_rule(rule_id)
     if not deleted:
@@ -543,7 +543,7 @@ async def simulate_policy(body: SimulatePolicyRequest, request: Request):
 @app.get("/rag/stats")
 async def rag_stats():
     """Return live RAG pipeline stats from the backend vector store."""
-    from backend.rag.ingestion import get_vector_store, get_chunk_by_id
+    from rag.ingestion import get_vector_store, get_chunk_by_id
     import json as _json
     from pathlib import Path
 
