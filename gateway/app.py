@@ -4,10 +4,11 @@ import asyncio
 import csv
 import io
 import json
+import logging
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, File, Request, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +37,9 @@ from mcp_server.server import mcp as mcp_server
 from security import issue_service_token
 
 
+logger = logging.getLogger("gateway.app")
+
+
 async def _warmup_mcp(app: FastAPI) -> None:
     """Connect the MCP client in the background after the HTTP server is ready.
 
@@ -51,6 +55,9 @@ async def _warmup_mcp(app: FastAPI) -> None:
                     app.state.mcp_connected = True
             return
         except Exception:
+            # Log the real cause — previously swallowed, which hid why MCP-backed
+            # routes (/deals, /chat, …) fail with a masked 500.
+            logger.exception("MCP warmup attempt %d/3 failed", attempt)
             await asyncio.sleep(attempt)
 
 
@@ -96,9 +103,19 @@ async def ensure_mcp_connected(request: Request):
                 return
             except Exception as exc:
                 if attempt == 3:
-                    raise RuntimeError(
-                        f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
-                        f"Is the backend running? Error: {exc}"
+                    # Log the real exception (full traceback) before raising so the
+                    # actual cause appears in logs — e.g. a 401 from the /mcp mount
+                    # (MCP_INTERNAL_TOKEN / session-token issue) vs a transport error.
+                    logger.exception("MCP connect failed after 3 attempts")
+                    # HTTPException (not RuntimeError) so FastAPI returns a clean
+                    # JSON 503 instead of BaseHTTPMiddleware masking it as
+                    # "No response returned".
+                    raise HTTPException(
+                        status_code=503,
+                        detail=(
+                            f"Cannot connect to MCP server at {MCP_SERVER_URL}. "
+                            f"Verify MCP_INTERNAL_TOKEN is set on the server. Error: {exc}"
+                        ),
                     ) from exc
                 await asyncio.sleep(0.5 * attempt)
 
@@ -268,6 +285,10 @@ async def list_deals(request: Request):
     """Return all deals with a triage_status field."""
     await ensure_mcp_connected(request)
     raw = await request.app.state.mcp.call_tool("backstop.list_deals", {})
+    # call_tool returns "ERROR: …" on a tool failure; don't blindly json.loads it
+    # (that would throw and surface as a masked 500).
+    if raw.startswith("ERROR:"):
+        raise HTTPException(status_code=502, detail=f"MCP tool 'backstop.list_deals' failed: {raw}")
     deals = json.loads(raw)
     for deal in deals:
         triage = deal.get("triage_results")
