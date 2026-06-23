@@ -4,7 +4,30 @@
 // the many scattered `fetch(${API_BASE}/...)` call sites don't each need editing.
 
 export const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3000";
-export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
+// Resolved at RUNTIME from the gateway's GET /auth/config (see loadRuntimeConfig,
+// called in main.tsx before render), so it reflects the deployed container's
+// GOOGLE_CLIENT_ID env with no build-time value required. A build-time
+// VITE_GOOGLE_CLIENT_ID, if present, is used only as a fallback.
+// Exported as `let` so consumers (e.g. LoginPage) see the value via the live
+// ES-module binding once loadRuntimeConfig() has run.
+export let GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
+/**
+ * Fetch browser-side config from the gateway and apply it. Call once at startup
+ * (before rendering) so GOOGLE_CLIENT_ID is set before any component reads it.
+ */
+export async function loadRuntimeConfig(): Promise<void> {
+  try {
+    const res = await fetch(`${API_BASE}/auth/config`);
+    if (res.ok) {
+      const cfg = await res.json();
+      if (cfg?.googleClientId) GOOGLE_CLIENT_ID = cfg.googleClientId;
+    }
+  } catch {
+    // Endpoint unreachable — keep any build-time fallback value.
+  }
+}
 
 const TOKEN_KEY = "rialto.session.token";
 const USER_KEY = "rialto.session.user";

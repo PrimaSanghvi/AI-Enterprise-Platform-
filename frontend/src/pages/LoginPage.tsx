@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) {
-      setError("Google sign-in is not configured (VITE_GOOGLE_CLIENT_ID is missing).");
+      setError("Google sign-in is not configured (GOOGLE_CLIENT_ID is not set on the server).");
       return;
     }
 

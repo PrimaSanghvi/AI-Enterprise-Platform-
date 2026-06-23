@@ -23,6 +23,7 @@ from gateway.chat import run_chat
 from gateway.config import (
     ALLOWED_ORIGINS,
     GATEWAY_PORT,
+    GOOGLE_CLIENT_ID,
     MCP_INTERNAL_TOKEN,
     MCP_SERVER_URL,
     POLICY_ADMIN_ROLE,
@@ -237,6 +238,14 @@ async def auth_google(body: GoogleAuthRequest):
             status_code=exc.status,
             content={"error": exc.message, "code": "expired" if exc.expired else "error"},
         )
+
+
+@app.get("/auth/config")
+async def auth_config():
+    """Public: browser-side auth config resolved at RUNTIME from the container's
+    GOOGLE_CLIENT_ID env. The SPA fetches this on load instead of relying on a
+    build-time VITE_GOOGLE_CLIENT_ID, so one image works in any environment."""
+    return {"googleClientId": GOOGLE_CLIENT_ID}
 
 
 @app.get("/auth/me")
