@@ -154,6 +154,7 @@ export function useChat({ activeThread, onUpdateThread }: UseChatOptions) {
         { role: "user" as const, content: text },
       ];
 
+      let responseReceived = false;
       try {
         await streamChat(
           text,
@@ -179,6 +180,7 @@ export function useChat({ activeThread, onUpdateThread }: UseChatOptions) {
                 });
                 break;
               case "response": {
+                responseReceived = true;
                 const respData = evt.data as unknown as ChatResponseData;
                 dispatch({ type: "RESPONSE", data: respData });
                 // Persist to thread
@@ -196,6 +198,7 @@ export function useChat({ activeThread, onUpdateThread }: UseChatOptions) {
                 break;
               }
               case "error":
+                responseReceived = true;
                 dispatch({
                   type: "ERROR",
                   detail: (evt.data as { detail: string }).detail,
@@ -205,6 +208,9 @@ export function useChat({ activeThread, onUpdateThread }: UseChatOptions) {
           },
           controller.signal,
         );
+        if (!responseReceived) {
+          dispatch({ type: "ERROR", detail: "No response received from the server." });
+        }
       } catch (err) {
         if ((err as Error).name !== "AbortError") {
           dispatch({ type: "ERROR", detail: (err as Error).message });
