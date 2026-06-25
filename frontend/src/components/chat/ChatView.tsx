@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { ChatMessage, ChatThread, IntentClassifiedEvent, ChatStreamState } from "../../types/chat";
-import type { StreamEvent, ToolCallEvent, ToolResultEvent } from "../../types/triage";
+import type { ChatMessage, ChatThread, ChatStreamState } from "../../types/chat";
 import { ChatThreadsSidebar } from "./ChatThreadsSidebar";
 
 function SuggestionPills({
@@ -78,110 +77,14 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
   );
 }
 
-const STRATEGY_LABELS: Record<string, string> = {
-  graph: "Graph Query — checking relationships",
-  structured: "Structured Lookup — querying analytics",
-  vector: "Vector Search — searching documents",
-  lookup: "Record Lookup — fetching deal data",
-  hybrid: "Hybrid Query — multiple data sources",
-};
-
-function StreamingIndicator({
-  events,
-  intent,
-}: {
-  events: StreamEvent[];
-  intent?: IntentClassifiedEvent | null;
-}) {
-  if (events.length === 0 && !intent) {
-    return (
-      <div className="flex justify-start">
-        <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-secondary)]">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            Thinking...
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  const lastEvent = events.length > 0 ? events[events.length - 1] : null;
-  const toolName = lastEvent
-    ? lastEvent.type === "tool_call"
-      ? (lastEvent.data as ToolCallEvent).tool
-      : (lastEvent.data as ToolResultEvent).tool
-    : null;
-
+function StreamingIndicator() {
   return (
     <div className="flex justify-start">
-      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm">
-        {/* Strategy label */}
-        {intent && (
-          <div className="mb-2 flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-xs font-semibold uppercase">
-              {intent.strategy}
-            </span>
-            <span className="text-xs text-[var(--text-muted)]">
-              {STRATEGY_LABELS[intent.strategy] || intent.reasoning}
-            </span>
-          </div>
-        )}
-        {/* Active connectors */}
-        {intent && intent.connectors.length > 0 && (
-          <div className="mb-2 flex flex-wrap gap-1.5">
-            {intent.connectors.map((c) => (
-              <span
-                key={c}
-                className="px-2 py-0.5 rounded-full bg-green-100 text-green-800 text-xs font-medium"
-              >
-                {c}
-              </span>
-            ))}
-          </div>
-        )}
-        {events.length > 0 && (
-          <>
-            <div className="flex items-center gap-2 text-[var(--text-secondary)] mb-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              Calling tools...
-            </div>
-            <div className="space-y-1 font-mono text-xs">
-              {events.map((evt, i) => {
-                if (evt.type === "tool_call") {
-                  const data = evt.data as ToolCallEvent;
-                  return (
-                    <div key={i} className="text-blue-600">
-                      → {data.tool}
-                      {data.connector && (
-                        <span className="text-indigo-400 ml-1">
-                          [{data.connector}]
-                        </span>
-                      )}
-                    </div>
-                  );
-                }
-                const data = evt.data as ToolResultEvent;
-                return (
-                  <div key={i} className="text-green-600">
-                    ← {data.tool}
-                    {data.connector && (
-                      <span className="text-indigo-400 ml-1">
-                        [{data.connector}]
-                      </span>
-                    )}{" "}
-                    ✓
-                  </div>
-                );
-              })}
-            </div>
-            {toolName && (
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
-                {events.length} tool calls • Processing {toolName}
-              </div>
-            )}
-          </>
-        )}
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-secondary)]">
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          Thinking...
+        </span>
       </div>
     </div>
   );
@@ -368,9 +271,7 @@ export function ChatView({
           );
         })}
 
-        {isStreaming && (
-          <StreamingIndicator events={stream.events} intent={stream.intent} />
-        )}
+        {isStreaming && <StreamingIndicator />}
 
         {stream.status === "error" && stream.error && (
           <div className="flex justify-start">
