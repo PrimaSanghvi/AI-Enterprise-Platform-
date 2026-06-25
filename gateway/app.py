@@ -424,11 +424,15 @@ async def chat(body: ChatRequest, request: Request):
     mcp_client: MCPClient = request.app.state.mcp
 
     async def event_stream():
-        async for event in run_chat(body.message, body.conversation_history, mcp_client):
-            evt_type = event["event"]
-            payload = json.dumps(event["data"])
-            yield f"event: {evt_type}\ndata: {payload}\n\n"
-        yield "event: done\ndata: {}\n\n"
+        try:
+            async for event in run_chat(body.message, body.conversation_history, mcp_client):
+                evt_type = event["event"]
+                payload = json.dumps(event["data"])
+                yield f"event: {evt_type}\ndata: {payload}\n\n"
+        except Exception as exc:
+            yield f"event: error\ndata: {json.dumps({'detail': str(exc)})}\n\n"
+        finally:
+            yield "event: done\ndata: {}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
