@@ -68,12 +68,12 @@ Always state which data sources you used in your answer.
 
 When you have gathered enough context, provide your final answer wrapped in \
 <chat_response>...</chat_response> tags as a JSON object:
-{{
+{
   "answer": "<your conversational answer with inline citations>",
   "tools_used": ["<tool_name_1>", "<tool_name_2>"],
-  "sources": [{{"title": "<descriptive title>", "deal_id": "<deal_id or empty string>"}}],
+  "sources": [{"title": "<descriptive title>", "deal_id": "<deal_id or empty string>"}],
   "suggested_followups": ["<question 1>", "<question 2>", "<question 3>"]
-}}
+}
 
 FOLLOW-UP SUGGESTIONS:
 - Always include exactly 3 suggested_followups — short natural-language questions (under 10 words each)
@@ -143,7 +143,7 @@ async def run_chat(
 
     tools_used: list[str] = []
 
-    while True:
+    for _ in range(10):
         response = await client.messages.create(
             model=ANTHROPIC_MODEL,
             max_tokens=4096,
@@ -152,16 +152,10 @@ async def run_chat(
             messages=messages,
         )
 
-        # Collect tool_use blocks from this response
-        tool_uses = [b for b in response.content if b.type == "tool_use"]
-
-        if tool_uses:
+        if response.stop_reason == "tool_use":
             tool_results = []
-            for block in tool_uses:
-                # Track tool name
+            for block in (b for b in response.content if b.type == "tool_use"):
                 tools_used.append(block.name)
-
-                # Resolve connector display name
                 prefix = block.name.split("_")[0]
                 connector = CONNECTOR_DISPLAY_NAMES.get(prefix, prefix)
 
@@ -180,6 +174,7 @@ async def run_chat(
                     result_text = f"ERROR: tool '{block.name}' is not permitted in chat."
                 else:
                     result_text = await mcp.call_tool(block.name, block.input)
+
                 yield {
                     "event": "tool_result",
                     "data": {
@@ -200,13 +195,12 @@ async def run_chat(
             messages.append({"role": "assistant", "content": response.content})
             messages.append({"role": "user", "content": tool_results})
 
-        if response.stop_reason == "end_turn":
+        elif response.stop_reason == "end_turn":
             full_text = "".join(
                 b.text for b in response.content if b.type == "text"
             )
             try:
                 chat_resp = _parse_chat_response(full_text)
-                # Ensure tools_used reflects what was actually called
                 chat_resp["tools_used"] = list(dict.fromkeys(tools_used))
                 chat_resp["strategy"] = intent.strategy
                 chat_resp["connectors"] = intent.connectors
@@ -217,3 +211,15 @@ async def run_chat(
                     "data": {"detail": f"Failed to parse response: {exc}"},
                 }
             return
+
+        else:
+            yield {
+                "event": "error",
+                "data": {"detail": f"Model stopped unexpectedly: {response.stop_reason}"},
+            }
+            return
+
+    yield {
+        "event": "error",
+        "data": {"detail": "Max tool-call iterations reached without a final response."},
+    }
