@@ -21,6 +21,12 @@ SESSION_SECRET = os.getenv("SESSION_SECRET", "dev-insecure-session-secret-change
 # How long a user may access the system from their first login, in hours.
 ACCESS_WINDOW_HOURS = float(os.getenv("ACCESS_WINDOW_HOURS", "2"))
 
+# --- SMTP (email OTP) ---
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER", "")
+SMTP_PASS = os.getenv("SMTP_PASS", "")
+
 # --- Service-to-service / hardening ---
 # Shared secret the gateway's internal MCP client presents to the protected /mcp
 # mount (alongside a session token). MUST be set in production.

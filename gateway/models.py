@@ -66,3 +66,12 @@ class GoogleAuthRequest(BaseModel):
     """The Google ID token (JWT credential) returned by Google Identity Services."""
 
     credential: str
+
+
+class OTPSendRequest(BaseModel):
+    email: str
+
+
+class OTPVerifyRequest(BaseModel):
+    email: str
+    code: str

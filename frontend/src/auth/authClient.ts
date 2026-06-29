@@ -91,6 +91,37 @@ export async function exchangeGoogleCredential(credential: string): Promise<Sess
   return user;
 }
 
+export type OTPSendResult =
+  | { sent: true }
+  | { whitelisted: true; token: string; email: string; name: string; role: string; expires_at: string };
+
+/** Request a 6-digit OTP for the given email. Whitelisted domains return a session directly. */
+export async function sendOTP(email: string): Promise<OTPSendResult> {
+  const res = await fetch(`${API_BASE}/auth/otp/send`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Failed to send code.");
+  return data as OTPSendResult;
+}
+
+/** Verify a 6-digit OTP and return a SessionUser on success. Stores token + user in localStorage. */
+export async function verifyOTP(email: string, code: string): Promise<SessionUser> {
+  const res = await fetch(`${API_BASE}/auth/otp/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, code }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Verification failed.");
+  setToken(data.token);
+  const user: SessionUser = { email: data.email, name: data.name, expires_at: data.expires_at };
+  storeUser(user);
+  return user;
+}
+
 function resolveUrl(input: RequestInfo | URL): string {
   if (typeof input === "string") return input;
   if (input instanceof URL) return input.toString();

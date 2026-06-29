@@ -4,9 +4,12 @@ import {
   exchangeGoogleCredential,
   installFetchInterceptor,
   loadStoredSession,
+  sendOTP as sendOTPClient,
   setExpireHandler,
   setToken,
   storeUser,
+  verifyOTP as verifyOTPClient,
+  type OTPSendResult,
   type SessionUser,
 } from "./authClient";
 
@@ -17,6 +20,10 @@ interface AuthContextValue {
   notice: string | null;
   setNotice: (message: string | null) => void;
   loginWithGoogle: (credential: string) => Promise<void>;
+  /** Send OTP to email. Whitelisted domains return a session immediately and update auth state. */
+  sendOTP: (email: string) => Promise<OTPSendResult>;
+  /** Verify OTP code and log the user in. */
+  loginWithOTP: (email: string, code: string) => Promise<void>;
   logout: (message?: string) => void;
 }
 
@@ -85,12 +92,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const sendOTP = useMemo(
+    () => async (email: string): Promise<OTPSendResult> => {
+      const result = await sendOTPClient(email);
+      // Whitelisted domain: backend issued a session directly.
+      if ("token" in result && result.token) {
+        setToken(result.token);
+        const whitelistedUser: SessionUser = {
+          email: result.email,
+          name: result.name || email.split("@")[0],
+          expires_at: result.expires_at,
+        };
+        storeUser(whitelistedUser);
+        setNotice(null);
+        setUser(whitelistedUser);
+      }
+      return result;
+    },
+    [],
+  );
+
+  const loginWithOTP = useMemo(
+    () => async (email: string, code: string) => {
+      const newUser = await verifyOTPClient(email, code);
+      setNotice(null);
+      setUser(newUser);
+    },
+    [],
+  );
+
   const value: AuthContextValue = {
     user,
     isAuthenticated: ready && !!user && !isExpired(user),
     notice,
     setNotice,
     loginWithGoogle,
+    sendOTP,
+    loginWithOTP,
     logout,
   };
 

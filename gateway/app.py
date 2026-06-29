@@ -19,7 +19,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from gateway import ratelimit
 from gateway.agent import run_triage
-from gateway.auth import AuthError, login, require_active_user, verify_mcp_credentials
+from gateway.auth import AuthError, login, login_with_otp, require_active_user, send_otp, verify_mcp_credentials
 from gateway.chat import run_chat
 from gateway.config import (
     ALLOWED_ORIGINS,
@@ -31,7 +31,7 @@ from gateway.config import (
 )
 from gateway.deal_intake_agent import run_deal_intake
 from gateway.mcp_client import MCPClient
-from gateway.models import ChatDealRequest, GoogleAuthRequest, NewDealInput
+from gateway.models import ChatDealRequest, GoogleAuthRequest, NewDealInput, OTPSendRequest, OTPVerifyRequest
 
 from mcp_server.server import mcp as mcp_server
 from security import issue_service_token
@@ -250,6 +250,30 @@ async def auth_google(body: GoogleAuthRequest):
     """Exchange a Google ID token for a session token, enforcing the 2-hour window."""
     try:
         return login(body.credential)
+    except AuthError as exc:
+        return JSONResponse(
+            status_code=exc.status,
+            content={"error": exc.message, "code": "expired" if exc.expired else "error"},
+        )
+
+
+@app.post("/auth/otp/send")
+async def auth_otp_send(body: OTPSendRequest):
+    """Send a 6-digit code to the email, or log in directly for whitelisted domains."""
+    try:
+        return send_otp(body.email)
+    except AuthError as exc:
+        return JSONResponse(
+            status_code=exc.status,
+            content={"error": exc.message, "code": "expired" if exc.expired else "error"},
+        )
+
+
+@app.post("/auth/otp/verify")
+async def auth_otp_verify(body: OTPVerifyRequest):
+    """Verify a 6-digit code and issue a session token."""
+    try:
+        return login_with_otp(body.email, body.code)
     except AuthError as exc:
         return JSONResponse(
             status_code=exc.status,
