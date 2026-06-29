@@ -94,3 +94,72 @@ def login(credential: str) -> dict:
         "role": record.get("role"),
         "expires_at": expires_at.isoformat(),
     }
+
+
+def send_otp(email: str) -> dict:
+    """Email+OTP login — step 1.
+
+    Whitelisted domains skip OTP and receive a session immediately.
+    Expired accounts are blocked here; no code is sent.
+    All others get a fresh 6-digit code via email.
+    """
+    from connectors.user_access import is_whitelisted_domain, upsert_whitelisted_user
+    from gateway.otp import create_otp, send_otp_email
+
+    if is_whitelisted_domain(email):
+        record = upsert_whitelisted_user(email)
+        expires_at = _as_datetime(record["expires_at"])
+        token = issue_session_token(email, expires_at)
+        return {
+            "whitelisted": True,
+            "token": token,
+            "email": email,
+            "name": record.get("name") or email.split("@")[0],
+            "role": record.get("role"),
+            "expires_at": expires_at.isoformat(),
+        }
+
+    record = user_access.get_user(email)
+    if record is not None:
+        if user_access.now_utc() >= _as_datetime(record["expires_at"]):
+            raise AuthError(
+                "Your access window has expired. Please contact an administrator.",
+                status=403,
+                expired=True,
+            )
+
+    code = create_otp(email)
+    send_otp_email(email, code)
+    return {"sent": True}
+
+
+def login_with_otp(email: str, code: str) -> dict:
+    """Email+OTP login — step 2. Verify the code and issue a session token."""
+    from gateway.otp import verify_otp
+
+    verify_otp(email, code)  # raises AuthError on bad/expired/exceeded code
+
+    now = user_access.now_utc()
+    record = user_access.get_user(email)
+
+    if record is None:
+        expires_at = now + timedelta(hours=ACCESS_WINDOW_HOURS)
+        record = user_access.create_user(
+            email,
+            email.split("@")[0],
+            login_at=now,
+            expires_at=expires_at,
+        )
+    else:
+        if now >= _as_datetime(record["expires_at"]):
+            raise AuthError(EXPIRED_MESSAGE, status=403, expired=True)
+
+    expires_at = _as_datetime(record["expires_at"])
+    token = issue_session_token(email, expires_at)
+    return {
+        "token": token,
+        "email": email,
+        "name": record.get("name") or email.split("@")[0],
+        "role": record.get("role"),
+        "expires_at": expires_at.isoformat(),
+    }

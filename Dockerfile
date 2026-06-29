@@ -52,6 +52,9 @@ COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 # ── Hardcoded production config (never put in GCP Secrets) ───────────────────
 # Seeds data on first startup; skips if rows already exist (idempotent)
 ENV AUTO_SEED=true
+# SMTP for OTP emails (SMTP_USER and SMTP_PASS must be injected as secrets)
+ENV SMTP_HOST=smtp.gmail.com
+ENV SMTP_PORT=587
 
 EXPOSE 8080
 

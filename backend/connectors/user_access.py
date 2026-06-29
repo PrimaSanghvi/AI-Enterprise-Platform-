@@ -10,7 +10,7 @@ to 'Analyst' unless their email is listed in BOOTSTRAP_ADMIN_EMAILS, which lets
 the first administrator sign in without manual SQL.
 """
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from db import SCHEMA, execute, query
 
@@ -42,3 +42,35 @@ def create_user(email: str, name: str, login_at: datetime, expires_at: datetime)
 
 def now_utc() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def is_whitelisted_domain(email: str) -> bool:
+    """Return True if the email's domain is in the whitelisted_domains table."""
+    domain = email.lower().split("@")[-1] if "@" in email else ""
+    if not domain:
+        return False
+    rows = query(f"SELECT 1 FROM {SCHEMA}.whitelisted_domains WHERE domain = %s", (domain,))
+    return bool(rows)
+
+
+def upsert_whitelisted_user(email: str) -> dict:
+    """Create or refresh a 24-hour session for a whitelisted-domain user."""
+    now = now_utc()
+    expires_at = now + timedelta(hours=24)
+    name = email.split("@")[0]
+    role = ADMIN_ROLE if email.lower() in _bootstrap_admins() else DEFAULT_ROLE
+    existing = get_user(email)
+    if existing:
+        execute(
+            f"UPDATE {SCHEMA}.user_access SET login_at = %s, expires_at = %s WHERE email = %s",
+            (now, expires_at, email),
+        )
+    else:
+        execute(
+            f"""
+            INSERT INTO {SCHEMA}.user_access (email, name, login_at, expires_at, role)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (email, name, now, expires_at, role),
+        )
+    return get_user(email)
