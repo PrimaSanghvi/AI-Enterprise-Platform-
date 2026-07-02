@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from db import SCHEMA, execute, query
-from gateway.config import SMTP_HOST, SMTP_PASS, SMTP_PORT, SMTP_USER
+from gateway.config import SMTP_FROM, SMTP_HOST, SMTP_PASS, SMTP_PORT, SMTP_USER
 from security import AuthError
 
 OTP_EXPIRY_MINUTES = 10
@@ -78,7 +78,7 @@ def send_otp_email(email: str, code: str) -> None:
         )
 
     msg = MIMEMultipart()
-    msg["From"] = SMTP_USER
+    msg["From"] = SMTP_FROM
     msg["To"] = email
     msg["Subject"] = "Your sign-in code"
     msg.attach(
@@ -95,6 +95,6 @@ def send_otp_email(email: str, code: str) -> None:
             server.ehlo()
             server.starttls()
             server.login(SMTP_USER, SMTP_PASS)
-            server.sendmail(SMTP_USER, email, msg.as_string())
+            server.sendmail(SMTP_FROM, email, msg.as_string())
     except smtplib.SMTPException as exc:
         raise AuthError(f"Failed to send email: {exc}", status=500) from exc

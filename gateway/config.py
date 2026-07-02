@@ -26,6 +26,10 @@ SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER", "")
 SMTP_PASS = os.getenv("SMTP_PASS", "")
+# Sender address shown to recipients (e.g. a no-reply address). Falls back to
+# SMTP_USER if unset, since some providers require the From header to match
+# the authenticated account.
+SMTP_FROM = os.getenv("SMTP_FROM", "") or SMTP_USER
 
 # --- Service-to-service / hardening ---
 # Shared secret the gateway's internal MCP client presents to the protected /mcp
