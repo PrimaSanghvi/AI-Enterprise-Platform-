@@ -156,8 +156,9 @@ export function installFetchInterceptor(): void {
     const url = resolveUrl(input);
     const isApi = isApiRequest(url);
 
+    const hadToken = isApi && !!token;
     let nextInit = init;
-    if (isApi && token) {
+    if (hadToken) {
       const headers = new Headers(init.headers ?? (input instanceof Request ? input.headers : undefined));
       if (!headers.has("Authorization")) headers.set("Authorization", `Bearer ${token}`);
       nextInit = { ...init, headers };
@@ -165,7 +166,11 @@ export function installFetchInterceptor(): void {
 
     const response = await original(input, nextInit);
 
-    if (isApi && response.status === 401) {
+    // Only treat a 401 as "your session died" if this request actually carried a
+    // session token. Login endpoints (otp send/verify, google) never do — a 401
+    // there just means bad credentials, and should surface only as that request's
+    // own error, not trigger an app-wide logout/notice.
+    if (hadToken && response.status === 401) {
       let message = "Your session has expired. Please log in again.";
       try {
         const data = await response.clone().json();
