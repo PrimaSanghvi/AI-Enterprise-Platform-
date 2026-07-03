@@ -17,17 +17,14 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Light is the default for every first-time visitor, regardless of the
-  // browser/OS color-scheme preference — we never read matchMedia here.
-  // Only a previously-saved user choice (set via toggleTheme, post-login)
-  // can override it.
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("cogniify_theme");
-    return stored === "dark" ? "dark" : "light";
-  });
+  // Light is always the starting theme — every page load/login begins here,
+  // regardless of the browser/OS color-scheme preference (never read via
+  // matchMedia) or anything picked in a previous session. A toggle only
+  // affects the current tab; it is intentionally not persisted, so the next
+  // load/login always starts light again.
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    localStorage.setItem("cogniify_theme", theme);
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
