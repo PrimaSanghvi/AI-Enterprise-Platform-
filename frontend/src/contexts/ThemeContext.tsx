@@ -8,7 +8,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "dark",
+  theme: "light",
   toggleTheme: () => {},
 });
 
@@ -17,9 +17,13 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // Light is the default for every first-time visitor, regardless of the
+  // browser/OS color-scheme preference — we never read matchMedia here.
+  // Only a previously-saved user choice (set via toggleTheme, post-login)
+  // can override it.
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("cogniify_theme");
-    return (stored as Theme) || "dark";
+    return stored === "dark" ? "dark" : "light";
   });
 
   useEffect(() => {
