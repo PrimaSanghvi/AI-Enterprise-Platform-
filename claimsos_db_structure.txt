@@ -1,0 +1,101 @@
+TARGET_SCHEMA = "claimos_db"
+
+TABLES_TO_CREATE = {
+    "vendors": {
+        "id": "TEXT PRIMARY KEY",
+        "name": "TEXT NOT NULL",
+        "email": "TEXT",
+        "phone": "TEXT",
+        "country": "TEXT",
+        "gstNumber": "TEXT",
+        "panNumber": "TEXT",
+        "einNumber": "TEXT",
+        "ssnOrItin": "TEXT",
+        "stateRegistration": "TEXT",
+        "bankAccount": "TEXT",
+        "riskScore": "INTEGER",
+        "riskLevel": "TEXT",
+        "aiExplanation": "TEXT",
+        "status": "TEXT",
+        "createdAt": "TIMESTAMPTZ"
+    },
+    "inventory": {
+        "sku": "TEXT PRIMARY KEY",
+        "productName": "TEXT",
+        "category": "TEXT",
+        "currentStock": "INTEGER",
+        "reorderPoint": "INTEGER",
+        "predictedDemand": "INTEGER",
+        "leadTimeDays": "INTEGER",
+        "warehouseLocation": "TEXT",
+        "lastUpdated": "TIMESTAMPTZ",
+        "forecastConfidence": "NUMERIC"
+    },
+    "purchase_orders": {
+        "id": "TEXT PRIMARY KEY",
+        "vendorId": f"TEXT REFERENCES {TARGET_SCHEMA}.vendors(id)", 
+        "totalValue": "INTEGER",
+        "urgencyLevel": "TEXT",
+        "aiExplanation": "TEXT",
+        "status": "TEXT",
+        "createdAt": "TIMESTAMPTZ",
+        "products": "TEXT"
+    },
+    "claims": {
+        "id": "TEXT PRIMARY KEY",
+        "vendorId": f"TEXT REFERENCES {TARGET_SCHEMA}.vendors(id)", 
+        "productName": "TEXT",
+        "promotionId": "TEXT",
+        "poNumber": "TEXT",
+        "amount": "INTEGER",
+        "status": "TEXT",
+        "dateFiled": "TIMESTAMPTZ",
+        "description": "TEXT",
+        "discrepancyAmount": "INTEGER",
+        "aiConfidenceScore": "NUMERIC",
+        "aiRiskLevel": "TEXT"
+    },
+    "car_claim_analyzer_claims": {
+        "id": "TEXT PRIMARY KEY",
+        "created_at": "TIMESTAMPTZ",
+        "policyholder": "TEXT NOT NULL",
+        "vehicle_make_model": "TEXT NOT NULL",
+        "registration_plate": "TEXT",
+        "claim_text": "TEXT",
+        "incident_date": "DATE",
+        "reporting_date": "DATE",
+        "image_timestamp": "TIMESTAMP",
+        "gps_location": "TEXT",
+        "prior_claims_count": "INTEGER",
+        "account_age_days": "INTEGER",
+        "police_report_filed": "BOOLEAN",
+        "estimated_amount": "NUMERIC",
+        "image_filename": "TEXT",
+        "fraud_score": "INTEGER",
+        "determination": "TEXT",
+        "damage_severity": "TEXT",
+        "reasoning_bullets": "JSONB",
+        "recommended_action": "TEXT",
+        "selected_action": "TEXT"
+    },
+    "user_access": {
+        "email": "TEXT PRIMARY KEY",
+        "name": "TEXT",
+        "login_at": "TIMESTAMPTZ",
+        "expires_at": "TIMESTAMPTZ"
+    },
+    "whitelisted_domains": {
+        "id": "SERIAL PRIMARY KEY",
+        "domain": "TEXT UNIQUE NOT NULL",
+        "added_by": "TEXT NOT NULL DEFAULT 'system'",
+        "created_at": "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP"
+    },
+    "otp_tokens": {
+        "id": "SERIAL PRIMARY KEY",
+        "email": "TEXT NOT NULL",
+        "token": "TEXT NOT NULL",
+        "expires_at": "TIMESTAMPTZ NOT NULL",
+        "attempts": "INTEGER NOT NULL DEFAULT 0",
+        "created_at": "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP"
+    }
+}
