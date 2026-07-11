@@ -403,10 +403,10 @@ export default function GraphExplorerPage() {
                     x={n.x}
                     y={n.y + (isSelected ? 4.8 : isCompany ? 4.4 : 3.4)}
                     textAnchor="middle"
-                    fill={dimmed ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.8)"}
+                    fillOpacity={dimmed ? 0.12 : 0.9}
                     fontSize={isSelected ? 1.8 : isCompany ? 1.6 : 1.3}
                     className="transition-all duration-300"
-                    style={{ fontFamily: "system-ui, sans-serif" }}
+                    style={{ fontFamily: "system-ui, sans-serif", fill: "var(--text-primary)" }}
                   >
                     {n.label}
                   </text>
